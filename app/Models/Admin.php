@@ -19,6 +19,19 @@ class Admin extends Authenticatable {
 
     protected $guarded = [];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_at = date('Y-m-d H:i:s');
+            $model->updated_at = date('Y-m-d H:i:s');
+        });
+
+        static::updating(function ($model) {
+            $model->updated_at = date('Y-m-d H:i:s');
+        });
+    }
     public function group() {
         return $this->belongsTo(Group::class, 'group_id');
     }
