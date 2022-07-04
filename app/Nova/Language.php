@@ -2,8 +2,15 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\LanguageFilter;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Language extends Resource
@@ -32,6 +39,8 @@ class Language extends Resource
         'id',
     ];
 
+    public static $with = ['translations'];
+
     /**
      * Get the fields displayed by the resource.
      *
@@ -42,6 +51,62 @@ class Language extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('EN')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'en')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Text::make('EN')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'en')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnDetail(),
+            Text::make('AR')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'ar')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Text::make('AR')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'ar')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnDetail(),
+
+            Select::make('Active' , 'active')
+                ->options([
+                    '1' => 'Active',
+                    '0' => 'Not Active',
+                ])
+                ->onlyOnForms()
+                ->rules('required'),
+            Boolean::make('Active' , "active")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->onlyOnDetail(),
+
+            Boolean::make('Active' , "active")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->onlyOnIndex(),
+            Number::make('Positions' , 'position'),
+            HasOne::make('Category' , 'translations' , LanguageTranslation::class)->sortable(),
+
         ];
     }
 
@@ -64,7 +129,9 @@ class Language extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            new LanguageFilter()
+        ];
     }
 
     /**
