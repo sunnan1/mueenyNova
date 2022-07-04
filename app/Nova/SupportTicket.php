@@ -3,7 +3,10 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class SupportTicket extends Resource
@@ -32,6 +35,8 @@ class SupportTicket extends Resource
         'id',
     ];
 
+    public static $with = ['supportReason', 'user'];
+
     /**
      * Get the fields displayed by the resource.
      *
@@ -42,6 +47,56 @@ class SupportTicket extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('Name' , 'name'),
+            Text::make('Message' , 'message'),
+            Text::make('Status')->displayUsing(function (){
+                if ($this->status == 0)
+                {
+                    return  'Open';
+                }
+                if ($this->status == 1)
+                {
+                    return  'Pending';
+                }
+                if ($this->status == 2)
+                {
+                    return  'Closed';
+                }
+            }),
+            Text::make('EN')->displayUsing(function(){
+                foreach ($this->supportReason->translations as $locale)
+                {
+                    if ($locale->locale === 'en')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Text::make('AR')->displayUsing(function(){
+                foreach ($this->supportReason->translations as $locale)
+                {
+                    if ($locale->locale === 'ar')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Select::make('Status' , 'status')->options([
+                'Open' => 0,
+                'Pending' => 1,
+                'Closed' => 2
+            ]),
+            BelongsTo::make('Support Reason' , 'supportReason' , SupportReason::class)->onlyOnForms(),
+            BelongsTo::make('User' , 'user' , User::class),
+            Text::make('User Name')->displayUsing(function(){
+                return $this->user->name;
+            })->onlyOnIndex(),
+            Text::make('Mobile')->displayUsing(function(){
+                return $this->user->mobile;
+            })->onlyOnIndex(),
+            Text::make('Email')->displayUsing(function(){
+                return $this->user->email;
+            })->onlyOnIndex(),
         ];
     }
 
