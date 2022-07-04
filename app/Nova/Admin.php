@@ -3,9 +3,11 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Vyuldashev\NovaPermission\RoleBooleanGroup;
 
@@ -45,6 +47,12 @@ class Admin extends Resource
      */
     public function fields(Request $request)
     {
+        $codes = config('country.countries');
+        $codeOptions = [];
+        foreach($codes as $code)
+        {
+            $codeOptions[$code['code']] = $code['code'] . ' | '.$code['name'];
+        }
         return [
             ID::make()->sortable(),
 
@@ -59,6 +67,31 @@ class Admin extends Resource
                 ->rules('required', 'email', 'max:254')
                 ->creationRules('unique:users,email')
                 ->updateRules('unique:users,email,{{resourceId}}'),
+
+            Text::make('Country Code')
+                ->sortable()
+                ->onlyOnIndex(),
+
+            Text::make('Phone')
+                ->sortable(),
+
+            Select::make('Country Code', "country_code")
+                ->options($codeOptions)
+                ->onlyOnForms()
+                ->rules('required'),
+
+            Select::make('Active' , 'active')
+                ->options([
+                    '1' => 'Active',
+                    '0' => 'Not Active',
+                ])
+                ->onlyOnForms()
+                ->rules('required'),
+
+            Boolean::make('Active' , "active")
+                    ->trueValue(1)
+                    ->falseValue(0)
+                    ->onlyOnIndex(),
 
             Password::make('Password')
                 ->onlyOnForms()
