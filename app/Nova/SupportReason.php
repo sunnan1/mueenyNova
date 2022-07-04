@@ -3,7 +3,11 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class SupportReason extends Resource
@@ -32,6 +36,7 @@ class SupportReason extends Resource
         'id',
     ];
 
+    public static $with = ['translations'];
     /**
      * Get the fields displayed by the resource.
      *
@@ -42,6 +47,59 @@ class SupportReason extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('EN')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'en')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Text::make('EN')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'en')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnDetail(),
+            Text::make('AR')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'ar')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Text::make('AR')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'ar')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnDetail(),
+            Select::make('Active' , 'status')
+                ->options([
+                    '1' => 'Active',
+                    '0' => 'Not Active',
+                ])
+                ->onlyOnForms()
+                ->rules('required'),
+            Boolean::make('Active' , "status")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->onlyOnDetail(),
+
+            Boolean::make('Active' , "status")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->onlyOnIndex(),
+            HasMany::make('Support Reason' , 'translations' , SupportReasonTranslation::class),
         ];
     }
 
