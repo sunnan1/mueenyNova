@@ -3,7 +3,12 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class ReportReason extends Resource
@@ -14,6 +19,8 @@ class ReportReason extends Resource
      * @var string
      */
     public static $model = \App\Models\ReportReason::class;
+
+    public static $with = ['translations'];
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -41,6 +48,41 @@ class ReportReason extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('EN')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'en')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Text::make('AR')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'ar')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Select::make('Active' , 'status')
+                ->options([
+                    '1' => 'Active',
+                    '0' => 'Not Active',
+                ])
+                ->onlyOnForms()
+                ->rules('required'),
+            Boolean::make('Active' , "status")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->onlyOnDetail(),
+
+            Boolean::make('Active' , "status")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->onlyOnIndex(),
+            HasMany::make('Report Reason Translations' , 'translations' , ReportReasonTranslation::class),
         ];
     }
 

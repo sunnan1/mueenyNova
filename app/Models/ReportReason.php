@@ -9,6 +9,7 @@ class ReportReason extends MyModel
 {
     public $table = 'report_reasons';
 
+
     public $statuses = [
         'active' => 0,
         'not_active' => 1

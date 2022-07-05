@@ -3,8 +3,9 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Fields\Text;
 
 class ReportReasonTranslation extends Resource
 {
@@ -41,6 +42,9 @@ class ReportReasonTranslation extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('Locale' , 'locale'),
+            Text::make('Name' , 'name'),
+            BelongsTo::make('Reason' , 'reason' , ReportReason::class),
         ];
     }
 
