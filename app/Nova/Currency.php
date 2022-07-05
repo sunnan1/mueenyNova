@@ -3,7 +3,12 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Currency extends Resource
@@ -15,6 +20,7 @@ class Currency extends Resource
      */
     public static $model = \App\Models\Currency::class;
 
+    public static $with = ['translations'];
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
@@ -41,6 +47,35 @@ class Currency extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('EN')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'en')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Text::make('AR')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'ar')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Boolean::make('Active' , "active")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->rules('required'),
+            Boolean::make('Default' , "is_default")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->rules('required'),
+            Number::make('Positions' , 'position'),
+            Text::make('Rate' , 'rate'),
+            HasMany::make('Currency Translations' , 'translations' , CurrencyTranslation::class),
         ];
     }
 
