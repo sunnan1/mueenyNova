@@ -65,19 +65,19 @@ class EfficiencyLevel extends Resource
                     }
                 }
             })->onlyOnIndex(),
-            Select::make('Active' , 'status')
+            Select::make('Active' , 'active')
                 ->options([
                     '1' => 'Active',
                     '0' => 'Not Active',
                 ])
                 ->onlyOnForms()
                 ->rules('required'),
-            Boolean::make('Active' , "status")
+            Boolean::make('Active' , "active")
                 ->trueValue(1)
                 ->falseValue(0)
                 ->onlyOnDetail(),
 
-            Boolean::make('Active' , "status")
+            Boolean::make('Active' , "active")
                 ->trueValue(1)
                 ->falseValue(0)
                 ->onlyOnIndex(),
