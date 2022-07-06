@@ -3,7 +3,12 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Location extends Resource
@@ -43,6 +48,42 @@ class Location extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('EN')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'en')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Text::make('AR')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'ar')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->onlyOnIndex(),
+            Select::make('Active' , 'active')
+                ->options([
+                    '1' => 'Active',
+                    '0' => 'Not Active',
+                ])
+                ->onlyOnForms()
+                ->rules('required'),
+            Boolean::make('Active' , "active")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->onlyOnDetail(),
+
+            Boolean::make('Active' , "active")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->onlyOnIndex(),
+            Number::make('Positions' , 'position'),
+            HasMany::make('Transportation Translation' , 'translations' , TransportationTranslation::class),
         ];
     }
 

@@ -3,7 +3,9 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class LocationTranslation extends Resource
@@ -42,6 +44,9 @@ class LocationTranslation extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('Locale' , 'locale'),
+            Text::make('Name' , 'name'),
+            BelongsTo::make('Location' , 'location' , Location::class),
         ];
     }
 
