@@ -3,14 +3,14 @@
 namespace App\Models;
 
 class Category extends MyModel {
- 
+
     protected $table = "categories";
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
         'image' => 'string'
     ];
-   
+
     public function translations() {
         return $this->hasMany(CategoryTranslation::class, 'category_id');
     }
@@ -20,7 +20,12 @@ class Category extends MyModel {
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    
+    public function category()
+    {
+        return $this->belongsTo(Category::class , 'parent_id'  ,'id');
+    }
+
+
     public function treeTransform(){
         $transformer = new \stdClass();
         $transformer->id = $this->id;
@@ -31,7 +36,7 @@ class Category extends MyModel {
             $transformer->childrens = $this->childrens ?: [];
             $transformer->no_of_sub = count($transformer->childrens);
         }
-        
+
         return $transformer;
     }
 
@@ -45,7 +50,7 @@ class Category extends MyModel {
         $transformer->partner = $this->partner;
         return $transformer;
     }
-  
+
 
     protected static function boot() {
         parent::boot();
@@ -57,9 +62,9 @@ class Category extends MyModel {
             foreach ($category->childs as $child) {
                 $child->delete();
             }
-            
+
         });
-        
+
         static::deleted(function (Category $category) {
             $category->deleteUploaded('categories', $category->image);
         });

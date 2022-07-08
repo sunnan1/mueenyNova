@@ -3,8 +3,12 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Category extends Resource
@@ -45,6 +49,55 @@ class Category extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('EN')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'en')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->exceptOnForms(),
+            Text::make('AR')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'ar')
+                    {
+                        return $locale->name;
+                    }
+                }
+            })->exceptOnForms(),
+            Boolean::make('Active' , "active")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->rules('required'),
+            Number::make('Positions' , 'position'),
+            Number::make('Level' , 'level'),
+            BelongsTo::make('Parent' , 'category' , Category::class),
+            Text::make('EN Parent Category')->displayUsing(function(){
+                if ($this->category)
+                {
+                    foreach ($this->category->translations as $cat)
+                    {
+                        if ($cat->locale === 'en')
+                        {
+                            return $cat->name;
+                        }
+                    }
+                }
+            })->exceptOnForms(),
+            Text::make('AR Parent Category')->displayUsing(function(){
+                if ($this->category)
+                {
+                    foreach ($this->category->translations as $cat)
+                    {
+                        if ($cat->locale === 'ar')
+                        {
+                            return $cat->name;
+                        }
+                    }
+                }
+            })->exceptOnForms(),
             HasMany::make('Translations' , 'translations' , CategoryTranslation::class)
         ];
     }
