@@ -3,7 +3,9 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class MembershipTranslation extends Resource
@@ -41,6 +43,9 @@ class MembershipTranslation extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('Locale' , 'locale'),
+            Text::make('Name' , 'name'),
+            BelongsTo::make('Membership' , 'membership' , Membership::class),
         ];
     }
 
