@@ -3,6 +3,9 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Nova\Fields\Avatar;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
@@ -48,6 +51,17 @@ class Location extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Avatar::make('Location', 'image')
+                ->disk('public')
+                ->resolveUsing(fn ($v) => $v ?: '')
+                ->store(function (Request $request, \App\Models\Location $model) {
+                    if ($model->image) {
+                        Storage::disk('public')->delete($model->image);
+                    }
+                    return ['image' => $request->image->store('/uploads', 'public')];
+                })
+                ->disableDownload(),
+
             Text::make('EN')->displayUsing(function(){
                 foreach ($this->translations as $locale)
                 {
@@ -56,7 +70,7 @@ class Location extends Resource
                         return $locale->name;
                     }
                 }
-            })->onlyOnIndex(),
+            })->exceptOnForms(),
             Text::make('AR')->displayUsing(function(){
                 foreach ($this->translations as $locale)
                 {
@@ -65,25 +79,39 @@ class Location extends Resource
                         return $locale->name;
                     }
                 }
-            })->onlyOnIndex(),
-            Select::make('Active' , 'active')
-                ->options([
-                    '1' => 'Active',
-                    '0' => 'Not Active',
-                ])
-                ->onlyOnForms()
-                ->rules('required'),
+            })->exceptOnForms(),
             Boolean::make('Active' , "active")
                 ->trueValue(1)
-                ->falseValue(0)
-                ->onlyOnDetail(),
-
-            Boolean::make('Active' , "active")
-                ->trueValue(1)
-                ->falseValue(0)
-                ->onlyOnIndex(),
+                ->falseValue(0),
             Number::make('Positions' , 'position'),
-            HasMany::make('Transportation Translation' , 'translations' , TransportationTranslation::class),
+            Number::make('Level' , 'level'),
+            Text::make('Dial Code' , 'dial_code'),
+            BelongsTo::make('Parent' , 'location' , Location::class)->nullable(),
+            Text::make('EN Parent Location')->displayUsing(function(){
+                if ($this->location)
+                {
+                    foreach ($this->location->translations as $cat)
+                    {
+                        if ($cat->locale === 'en')
+                        {
+                            return $cat->name;
+                        }
+                    }
+                }
+            })->exceptOnForms(),
+            Text::make('AR Parent Location')->displayUsing(function(){
+                if ($this->location)
+                {
+                    foreach ($this->location->translations as $cat)
+                    {
+                        if ($cat->locale === 'ar')
+                        {
+                            return $cat->name;
+                        }
+                    }
+                }
+            })->exceptOnForms(),
+            HasMany::make('Location Translation' , 'translations' , LocationTranslation::class),
         ];
     }
 

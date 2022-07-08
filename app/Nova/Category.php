@@ -73,7 +73,7 @@ class Category extends Resource
                 ->rules('required'),
             Number::make('Positions' , 'position'),
             Number::make('Level' , 'level'),
-            BelongsTo::make('Parent' , 'category' , Category::class),
+            BelongsTo::make('Parent' , 'category' , Category::class)->nullable(),
             Text::make('EN Parent Category')->displayUsing(function(){
                 if ($this->category)
                 {
