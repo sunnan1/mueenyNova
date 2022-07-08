@@ -3,7 +3,9 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class WelcomeScreenTranslation extends Resource
@@ -43,6 +45,10 @@ class WelcomeScreenTranslation extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('Locale' , 'locale'),
+            Text::make('Title' , 'title'),
+            Text::make('Description' , 'description'),
+            BelongsTo::make('Welcome Screen' , 'welcome' , WelcomeScreen::class),
         ];
     }
 

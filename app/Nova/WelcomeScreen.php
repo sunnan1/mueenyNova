@@ -3,7 +3,15 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Avatar;
+use Laravel\Nova\Fields\BelongsTo;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class WelcomeScreen extends Resource
@@ -44,6 +52,59 @@ class WelcomeScreen extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Avatar::make('Banner', 'image')
+                ->disk('public')
+                ->resolveUsing(fn ($v) => $v ?: '')
+                ->store(function (Request $request, \App\Models\WelcomeScreen $model) {
+                    if ($model->image) {
+                        Storage::disk('public')->delete($model->image);
+                    }
+                    return ['image' => $request->image->store('/uploads', 'public')];
+                })
+                ->disableDownload(),
+
+            Text::make('EN Title')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'en')
+                    {
+                        return $locale->title;
+                    }
+                }
+            })->onlyOnIndex(),
+            Text::make('EN Description')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'en')
+                    {
+                        return $locale->description;
+                    }
+                }
+            })->onlyOnIndex(),
+            Text::make('AR Title')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'ar')
+                    {
+                        return $locale->title;
+                    }
+                }
+            })->onlyOnIndex(),
+            Text::make('AR Description')->displayUsing(function(){
+                foreach ($this->translations as $locale)
+                {
+                    if ($locale->locale === 'ar')
+                    {
+                        return $locale->description;
+                    }
+                }
+            })->onlyOnIndex(),
+            Boolean::make('Active' , "active")
+                ->trueValue(1)
+                ->falseValue(0)
+                ->rules('required'),
+            Number::make('Positions' , 'position'),
+            HasMany::make('Welcome Screen Translations' , 'translations' , WelcomeScreenTranslation::class),
         ];
     }
 
