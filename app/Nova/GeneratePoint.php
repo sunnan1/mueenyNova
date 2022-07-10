@@ -4,6 +4,9 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class GeneratePoint extends Resource
@@ -41,6 +44,12 @@ class GeneratePoint extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('User Phone Number' , 'user_phone_number'),
+            Text::make('Bill Id' , 'bill_id'),
+            Currency::make('Amount' , 'amount'),
+            Number::make('Generate Points' , 'generated_points'),
+            Number::make('Duration Return' , 'duration_return'),
+
         ];
     }
 

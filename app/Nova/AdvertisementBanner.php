@@ -3,7 +3,13 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Nova\Fields\Avatar;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class AdvertisementBanner extends Resource
@@ -20,7 +26,7 @@ class AdvertisementBanner extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -41,6 +47,23 @@ class AdvertisementBanner extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Avatar::make('Image', 'image')
+                ->disk('public')
+                ->resolveUsing(fn ($v) => $v ?: '')
+                ->store(function (Request $request, \App\Models\AdvertisementBanner $model) {
+                    if ($model->image) {
+                        Storage::disk('public')->delete($model->image);
+                    }
+                    return ['image' => $request->image->store('/uploads', 'public')];
+                })
+                ->disableDownload(),
+            Text::make('Name' , 'name'),
+            Text::make('Link' , 'link'),
+            Boolean::make('Active' , "active")
+                ->trueValue(1)
+                ->falseValue(0),
+            Number::make('Sort Order' , 'sort_order'),
+            BelongsTo::make('Category' , 'category' , Category::class)
         ];
     }
 

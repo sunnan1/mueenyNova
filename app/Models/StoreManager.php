@@ -29,16 +29,25 @@ class StoreManager extends Model
         "user_id",
     ];
 
+    protected $casts = [
+        'doj'          => 'date',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class , 'admin_id' , 'id');
     }
 
     public function partnerOffers()
     {
         return $this->hasMany(PartnerOffer::class,'store_id');
     }
-    
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -88,8 +97,8 @@ class StoreManager extends Model
         : 0;
     }
 
-    public function getCoverImageAttribute()
-    {
-        return 'public/uploads/admins/'.$this->attributes['cover_image'];
-    }
+//    public function getCoverImageAttribute()
+//    {
+//        return 'uploads/admins/'.$this->attributes['cover_image'];
+//    }
 }
