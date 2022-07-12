@@ -3,7 +3,9 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class PaymentMethodTranslation extends Resource
@@ -20,7 +22,7 @@ class PaymentMethodTranslation extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -41,6 +43,9 @@ class PaymentMethodTranslation extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('Locale' , 'locale'),
+            Text::make('Name' , 'name'),
+            BelongsTo::make('Payment Method' , 'payment' , PaymentMethod::class),
         ];
     }
 
