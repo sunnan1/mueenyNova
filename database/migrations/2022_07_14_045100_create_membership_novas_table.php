@@ -15,6 +15,15 @@ class CreateMembershipNovasTable extends Migration
     {
         Schema::create('membership_novas', function (Blueprint $table) {
             $table->id();
+            $table->string('name_en')->nullable();
+            $table->string('name_ar')->nullable();
+            $table->tinyInteger('is_active');
+            $table->integer('points');
+            $table->decimal('amount');
+            $table->string('image')->nullable();
+            $table->enum('membership_type' , ['admins' , 'stores'])->default('admins');
+            $table->decimal('commission_percentage');
+            $table->tinyInteger('default');
             $table->timestamps();
         });
     }

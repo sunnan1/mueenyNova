@@ -15,6 +15,11 @@ class CreateSupportTicketNovasTable extends Migration
     {
         Schema::create('support_ticket_novas', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->string('message')->nullable();
+            $table->integer('status');
+            $table->unsignedBigInteger('support_reason_id')->index();
+            $table->unsignedBigInteger('user_id')->index();
             $table->timestamps();
         });
     }

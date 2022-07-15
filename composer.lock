@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0d87a45b98ad879ff868fe2387de5a5",
+    "content-hash": "3c3f649b603f3b1e6b5c7424be9f1ce0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -241,6 +241,57 @@
                 "source": "https://github.com/cakephp/chronos"
             },
             "time": "2021-10-17T02:44:05+00:00"
+        },
+        {
+            "name": "chaseconey/nova-external-image",
+            "version": "0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chaseconey/nova-external-image.git",
+                "reference": "915fde8dd760cd3ca6e1bc9042899938eeb6af83"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chaseconey/nova-external-image/zipball/915fde8dd760cd3ca6e1bc9042899938eeb6af83",
+                "reference": "915fde8dd760cd3ca6e1bc9042899938eeb6af83",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Chaseconey\\ExternalImage\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Chaseconey\\ExternalImage\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/chaseconey/nova-external-image/issues",
+                "source": "https://github.com/chaseconey/nova-external-image/tree/0.3.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/chaseconey",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-08-10T01:44:12+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -9317,5 +9368,5 @@
         "php": "^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

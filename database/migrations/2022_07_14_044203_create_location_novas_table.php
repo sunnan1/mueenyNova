@@ -15,6 +15,14 @@ class CreateLocationNovasTable extends Migration
     {
         Schema::create('location_novas', function (Blueprint $table) {
             $table->id();
+            $table->string('name_en')->nullable();
+            $table->string('name_ar')->nullable();
+            $table->tinyInteger('active');
+            $table->integer('position');
+            $table->integer('level');
+            $table->integer('dial_code');
+            $table->string('image');
+            $table->unsignedBigInteger('parent_id')->index();
             $table->timestamps();
         });
     }

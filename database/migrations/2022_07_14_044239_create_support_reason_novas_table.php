@@ -15,6 +15,9 @@ class CreateSupportReasonNovasTable extends Migration
     {
         Schema::create('support_reason_novas', function (Blueprint $table) {
             $table->id();
+            $table->string('name_en')->nullable();
+            $table->string('name_ar')->nullable();
+            $table->tinyInteger('status');
             $table->timestamps();
         });
     }

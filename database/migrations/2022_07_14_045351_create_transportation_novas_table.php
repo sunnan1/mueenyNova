@@ -15,6 +15,10 @@ class CreateTransportationNovasTable extends Migration
     {
         Schema::create('transportation_novas', function (Blueprint $table) {
             $table->id();
+            $table->string('name_en')->nullable();
+            $table->string('name_ar')->nullable();
+            $table->tinyInteger('active');
+            $table->bigInteger('position');
             $table->timestamps();
         });
     }

@@ -15,6 +15,10 @@ class CreateEfficiencyLevelNovasTable extends Migration
     {
         Schema::create('efficiency_level_novas', function (Blueprint $table) {
             $table->id();
+            $table->string('name_en')->nullable();
+            $table->string('name_ar')->nullable();
+            $table->tinyInteger('active');
+            $table->integer('position');
             $table->timestamps();
         });
     }

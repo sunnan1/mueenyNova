@@ -9,10 +9,14 @@ class PartnerOffer extends MyModel
     public function translations()
     {
         return $this->hasMany(PartnerOfferTranslation::class, 'partner_offer_id');
-    }   
+    }
 
     public function store()
     {
         return $this->belongsTo(StoreManager::class,'store_id');
+    }
+    public function getImagesAttribute()
+    {
+        return json_decode($this->attributes['images']);
     }
 }

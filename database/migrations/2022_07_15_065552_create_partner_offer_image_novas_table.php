@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentMethodNovasTable extends Migration
+class CreatePartnerOfferImageNovasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreatePaymentMethodNovasTable extends Migration
      */
     public function up()
     {
-        Schema::create('payment_method_novas', function (Blueprint $table) {
+        Schema::create('partner_offer_image_novas', function (Blueprint $table) {
             $table->id();
-            $table->string('name_en')->nullable();
-            $table->string('name_ar')->nullable();
-            $table->tinyInteger('status');
-            $table->enum('type' , ['online' , 'offline']);
+            $table->unsignedBigInteger('partner_offer_id')->index();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ class CreatePaymentMethodNovasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_method_novas');
+        Schema::dropIfExists('partner_offer_image_novas');
     }
 }
