@@ -22,7 +22,7 @@ class CreateLocationNovasTable extends Migration
             $table->integer('level');
             $table->integer('dial_code');
             $table->string('image');
-            $table->unsignedBigInteger('parent_id')->index();
+            $table->unsignedBigInteger('parent_id')->index()->nullable();
             $table->timestamps();
         });
     }

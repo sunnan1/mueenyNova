@@ -18,8 +18,8 @@ class CreateSupportTicketNovasTable extends Migration
             $table->string('name')->nullable();
             $table->string('message')->nullable();
             $table->integer('status');
-            $table->unsignedBigInteger('support_reason_id')->index();
-            $table->unsignedBigInteger('user_id')->index();
+            $table->unsignedBigInteger('support_reason_id')->index()->nullable();
+            $table->unsignedBigInteger('user_id')->index()->nullable();
             $table->timestamps();
         });
     }

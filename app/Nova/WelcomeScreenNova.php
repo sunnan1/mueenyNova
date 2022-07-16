@@ -5,30 +5,28 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\Avatar;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
-use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
-use Vyuldashev\NovaPermission\RoleBooleanGroup;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class User extends Resource
+class WelcomeScreenNova extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\User::class;
+    public static $model = \App\Models\WelcomeScreenNova::class;
 
-    public static $group = 'General';
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'title_en';
 
     /**
      * The columns that should be searched.
@@ -36,7 +34,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id',
     ];
 
     /**
@@ -47,56 +45,26 @@ class User extends Resource
      */
     public function fields(Request $request)
     {
-        $codes = config('country.countries');
-        $codeOptions = [];
-        foreach($codes as $code)
-        {
-            $codeOptions[$code['code']] = $code['code'] . ' | '.$code['name'];
-        }
         return [
-            ID::make()->sortable(),
-
+            ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
                 ->resolveUsing(fn ($v) => $v ?: '')
-                ->store(function (Request $request, \App\Models\User $model) {
+                ->store(function (Request $request, \App\Models\WelcomeScreenNova $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
                     return ['image' => $request->image->store('/uploads', 'public')];
                 })
                 ->disableDownload(),
-
-//            Gravatar::make()->maxWidth(50),
-
-            Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
-
-            Text::make('Phone' , 'mobile')
-                ->sortable(),
-
-            Text::make('Bio')
-                ->sortable(),
-            Select::make('Country Code', "country_code")
-                ->options($codeOptions)
-                ->onlyOnForms()
-                ->rules('required'),
-
+            Text::make('Title EN' , 'title_en'),
+            Text::make('Title AR' , 'title_ar'),
+            Text::make('Description EN' , 'description_en'),
+            Text::make('Description AR' , 'description_ar'),
             Boolean::make('Active' , "active")
-                    ->trueValue(1)
-                    ->falseValue(0),
-
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', 'string', 'min:8')
-                ->updateRules('nullable', 'string', 'min:8'),
+                ->trueValue(1)
+                ->falseValue(0),
+            Number::make('Position' , 'position'),
         ];
     }
 

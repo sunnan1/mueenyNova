@@ -22,7 +22,7 @@ class CreateCategoryNovasTable extends Migration
             $table->tinyInteger('partner');
             $table->bigInteger('position');
             $table->integer('level');
-            $table->unsignedBigInteger('parent_id')->index();
+            $table->unsignedBigInteger('parent_id')->index()->nullable();
             $table->timestamps();
         });
     }
