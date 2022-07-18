@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\StoreUserMembershipFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\Avatar;
@@ -93,7 +94,9 @@ class MembershipNova extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            new StoreUserMembershipFilter()
+        ];
     }
 
     /**
