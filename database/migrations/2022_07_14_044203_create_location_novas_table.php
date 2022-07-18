@@ -26,7 +26,6 @@ class CreateLocationNovasTable extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *

@@ -38,4 +38,9 @@ class AdvertisementBanner extends MyModel
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+    public function categorynova()
+    {
+        return $this->belongsTo(CategoryNova::class, 'category_id');
+    }
 }

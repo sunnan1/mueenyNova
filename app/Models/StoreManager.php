@@ -45,31 +45,31 @@ class StoreManager extends Model
 
     public function partnerOffers()
     {
-        return $this->hasMany(PartnerOffer::class,'store_id');
+        return $this->hasMany(PartnerOffer::class,'store_id' , 'id');
     }
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class , 'category_id' , 'id');
     }
 
     public function country()
     {
-        return $this->belongsTo(Location::class,'country_id');
+        return $this->belongsTo(Location::class,'country_id' , 'id');
     }
     public function city()
     {
-        return $this->belongsTo(Location::class,'city_id');
+        return $this->belongsTo(Location::class,'city_id' , 'id');
     }
 
     public function region()
     {
-        return $this->belongsTo(Location::class,'regoin_id');
+        return $this->belongsTo(Location::class,'regoin_id' , 'id');
     }
 
     public function membership()
     {
-        return $this->belongsTo(Membership::class);
+        return $this->belongsTo(Membership::class , 'membership_id' , 'id');
     }
 
     public function getMembership()

@@ -21,7 +21,6 @@ class CreateSupportReasonNovasTable extends Migration
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      *
