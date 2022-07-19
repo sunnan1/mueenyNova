@@ -9,5 +9,4 @@ class Notification extends MyModel
     protected $casts = [
         'id' => 'string'
     ];
-    
 }

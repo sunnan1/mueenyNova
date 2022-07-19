@@ -8,4 +8,10 @@ class ManualNotifications extends Model
 {
     protected $table = "manual_notifications";
     protected $guarded = [];
+
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class , 'admin_id' , 'id');
+    }
 }
