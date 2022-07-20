@@ -245,10 +245,14 @@ class Advertisement extends MyModel
     {
         return $this->belongsTo(Category::class, 'main_category_id');
     }
-
-    public function subCategory()
+    public function categoryNova()
     {
-        return $this->belongsTo(Category::class, 'sub_category_id');
+        return $this->belongsTo(CategoryNova::class, 'main_category_id');
+    }
+
+    public function subCategoryNova()
+    {
+        return $this->belongsTo(CategoryNova::class, 'sub_category_id');
     }
 
     public function paymentMethod()

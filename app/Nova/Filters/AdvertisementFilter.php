@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Filters\BooleanFilter;
 use Laravel\Nova\Filters\Filter;
 
-class AdvertisementFilter extends BooleanFilter
+class AdvertisementFilter extends Filter
 {
     /**
      * The filter's component.
@@ -24,15 +24,13 @@ class AdvertisementFilter extends BooleanFilter
      */
     public function apply(Request $request, $query, $value)
     {
-        foreach($value as $key => $v)
-        {
-            if ($key == 'commission') {
-                if ($v) {
-                    $query->active()->latest();
-                }
-            }
+        if ($value === 'operation') {
+            return $query->latest();
         }
-        return $query;
+        if ($value == 'commission') {
+            return $query->active()->latest();
+        }
+        return null;
     }
 
     /**
@@ -45,6 +43,7 @@ class AdvertisementFilter extends BooleanFilter
     {
         return [
             'Commission Details' => 'commission',
+            'Operation Records' => 'operation',
         ];
     }
 }

@@ -4,8 +4,11 @@ namespace App\Nova;
 
 use App\Nova\Filters\AdvertisementFilter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -46,6 +49,17 @@ class Advertisement extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+            Text::make('Full Name')->displayUsing(function (){
+                return $this->user->name;
+            })->exceptOnForms(),
+            Text::make('Email')->displayUsing(function (){
+                return $this->user->email;
+            })->exceptOnForms(),
+            Avatar::make('User Image', 'image')
+                ->disk('public')
+                ->resolveUsing(fn ($v) => $v ?: '')
+                ->exceptOnForms()
+                ->disableDownload(),
             Text::make('Title' , 'title')->exceptOnForms(),
             Text::make('Description' , 'description')->exceptOnForms(),
             Select::make('Type' , 'type')->options([
@@ -65,7 +79,11 @@ class Advertisement extends Resource
             Text::make('Payment Status' , 'payment_status')->displayUsing(function (){
                 return $this->type == 0 ? 'Pending' : ($this->type == 1 ? 'Paid' : '');
             })->exceptOnForms(),
+            BelongsTo::make('User' , 'user' , User::class)->exceptOnForms(),
             BelongsTo::make('Payment Method' , 'paymentMethodNova' , PaymentMethodNova::class)->exceptOnForms(),
+            BelongsTo::make('Main Category' , 'categoryNova' , CategoryNova::class)->exceptOnForms(),
+            BelongsTo::make('Sub Category' , 'subCategoryNova' , CategoryNova::class)->exceptOnForms(),
+            HasMany::make('Offers', 'offers' , Offer::class),
             Text::make('Status' , 'status')->displayUsing(function (){
                 if ($this->status == 0)
                 {
