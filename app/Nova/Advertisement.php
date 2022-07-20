@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -55,11 +56,7 @@ class Advertisement extends Resource
             Text::make('Email')->displayUsing(function (){
                 return $this->user->email;
             })->exceptOnForms(),
-            Avatar::make('User Image', 'image')
-                ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
-                ->exceptOnForms()
-                ->disableDownload(),
+            Image::make('Profile Photo')->disk('public')->exceptOnForms(),
             Text::make('Title' , 'title')->exceptOnForms(),
             Text::make('Description' , 'description')->exceptOnForms(),
             Select::make('Type' , 'type')->options([
