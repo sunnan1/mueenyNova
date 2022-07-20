@@ -20,7 +20,8 @@ class Advertisement extends MyModel
         'service_provider_rate' => 'double',
         'service_provider_rates_count' => 'integer',
         'score' => 'double',
-        'cancellation_status' => 'boolean'
+        'cancellation_status' => 'boolean',
+        'date' => 'date'
     ];
 
     public $stauses = [
@@ -253,6 +254,11 @@ class Advertisement extends MyModel
     public function paymentMethod()
     {
         return $this->belongsTo(PaymentMethod::class, 'payment_method');
+    }
+
+    public function paymentMethodNova()
+    {
+        return $this->belongsTo(PaymentMethodNova::class, 'payment_method' , 'id');
     }
 
     public function authUser()
