@@ -3,9 +3,9 @@
 namespace App\Models;
 
 class BankAccount extends MyModel {
- 
+
     protected $table = "bank_accounts";
-    
+
     protected $casts = [
         'id' => 'integer'
     ];
@@ -26,12 +26,17 @@ class BankAccount extends MyModel {
         parent::boot();
 
         static::deleting(function(BankAccount $bankAccount) {
-          
+
         });
-        
+
         static::deleted(function (BankAccount $bankAccount) {
-           
+
         });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class , 'user_id' , 'id');
     }
 
 }

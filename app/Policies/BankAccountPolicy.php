@@ -5,6 +5,6 @@ namespace App\Policies;
 use App\Models\Admin;
 use Illuminate\Auth\Access\Response;
 
-class ManualNotificationPolicy extends Policy
+class BankAccountPolicy extends Policy
 {
 }

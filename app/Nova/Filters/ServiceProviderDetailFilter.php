@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Filters\BooleanFilter;
 use Laravel\Nova\Filters\Filter;
 
-class AdvertisementFilter extends Filter
+class ServiceProviderDetailFilter extends Filter
 {
     /**
      * The filter's component.
@@ -24,22 +24,14 @@ class AdvertisementFilter extends Filter
      */
     public function apply(Request $request, $query, $value)
     {
-        if ($value === 'operation') {
-            return $query->latest();
+        if ($value === 'join') {
+            return $query->latest()->where('is_submitted', 1)->pending();
         }
-        if ($value === 'active') {
-            $query->active();
+        if ($value === 'agency') {
+            return $query->rejected();
         }
-        if ($value === 'past') {
-            $query->past();
-        }
-        if ($value === 'invoice') {
-            $query->completed();
-        }
-        if ($value == 'commission') {
-            $query->active();
-        }
-        return $query->latest();
+
+        return $query;
     }
 
     /**
@@ -51,11 +43,8 @@ class AdvertisementFilter extends Filter
     public function options(Request $request)
     {
         return [
-            'Active Orders' => 'active',
-            'Past Orders' => 'past',
-            'Invoices' => 'invoice',
-            'Commission Details' => 'commission',
-            'Operation Records' => 'operation',
+            'Join Requests' => 'join',
+            'Join Request Agency' => 'agency',
         ];
     }
 }

@@ -67,11 +67,18 @@ class Advertisement extends Resource
                 0 => 'Pending',
                 1 => 'Paid'
             ])->onlyOnForms(),
+            Select::make('Status' , 'status')->options([
+                0 => 'Waiting for acceptance',
+                1 => 'Active',
+                2 => 'Completed',
+                3 => 'Cancelled',
+                4 => 'Refunded',
+            ])->onlyOnForms(),
             Text::make('Type' , 'type')->displayUsing(function (){
                 return $this->type == 1 ? 'In Location' : ($this->type == 2 ? 'Remotely' : '');
             })->exceptOnForms(),
-            Date::make('Date' , 'date')->exceptOnForms(),
-            Text::make('Budget' , 'budget')->exceptOnForms(),
+            Date::make('Date' , 'date'),
+            Text::make('Budget' , 'budget'),
             Text::make('Commission' , 'commission'),
             Text::make('Payment Status' , 'payment_status')->displayUsing(function (){
                 return $this->type == 0 ? 'Pending' : ($this->type == 1 ? 'Paid' : '');
@@ -103,6 +110,8 @@ class Advertisement extends Resource
                     return 'Refunded';
                 }
             })->exceptOnForms(),
+            Text::make('Invoice Number' , 'invoice_number')->exceptOnForms(),
+
         ];
     }
 
