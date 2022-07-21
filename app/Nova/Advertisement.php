@@ -48,7 +48,7 @@ class Advertisement extends Resource
      */
     public function fields(Request $request)
     {
-        return [
+        $columns =  [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make('Full Name')->displayUsing(function (){
                 return $this->user->name;
@@ -111,8 +111,17 @@ class Advertisement extends Resource
                 }
             })->exceptOnForms(),
             Text::make('Invoice Number' , 'invoice_number')->exceptOnForms(),
-
-        ];
+            ];
+            $additional = [];
+            if ($this->status === 2)
+            {
+                $additional = [
+                    Text::make('Invoices')->displayUsing(function(){
+                        return '<a target="_blank" href="' . env('APP_URL') . '/orders_management/pdf/' . $this->id . '/C">Client Invoice</a> &nbsp;&nbsp;&nbsp; <a target="_blank" href="' . env('APP_URL') . '/orders_management/pdf/' . $this->id . '/S">SP Invoice</a>';
+                    })->asHtml(),
+                ];
+            }
+            return array_merge($columns , $additional);
     }
 
     /**

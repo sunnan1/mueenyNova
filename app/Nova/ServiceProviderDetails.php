@@ -51,7 +51,7 @@ class ServiceProviderDetails extends Resource
      */
     public function fields(Request $request)
     {
-        return [
+        $columns =  [
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
@@ -146,6 +146,8 @@ class ServiceProviderDetails extends Resource
                 ->falseValue(0),
             HasMany::make('Documents' , 'documents' , ServiceProviderDetailDocuments::class),
         ];
+
+        return $columns;
     }
 
     /**
