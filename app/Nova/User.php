@@ -5,8 +5,11 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\Avatar;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Select;
@@ -63,7 +66,7 @@ class User extends Resource
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads', 'public')];
+                    return ['image' => $request->image->store('/uploads/users', 'public')];
                 })
                 ->disableDownload(),
 
@@ -78,25 +81,67 @@ class User extends Resource
                 ->rules('required', 'email', 'max:254')
                 ->creationRules('unique:users,email')
                 ->updateRules('unique:users,email,{{resourceId}}'),
+            Select::make('Country Code', "country_code")
+                ->options($codeOptions)
+                ->onlyOnForms()
+                ->rules('required'),
 
             Text::make('Phone' , 'mobile')
                 ->sortable(),
 
             Text::make('Bio')
                 ->sortable(),
-            Select::make('Country Code', "country_code")
-                ->options($codeOptions)
-                ->onlyOnForms()
-                ->rules('required'),
+
+            Date::make('Date of Birth' , 'dob'),
+
+            Select::make('Gender', "gender")
+                ->options([
+                    1 => 'Male',
+                    2 => 'Female'
+                ])->onlyOnForms(),
+            Text::make('Gender' , 'gender')->exceptOnForms(),
 
             Boolean::make('Active' , "active")
                     ->trueValue(1)
                     ->falseValue(0),
 
+            Boolean::make('Service Provider' , "is_service_provider")
+                ->trueValue(1)
+                ->falseValue(0),
+
+            Boolean::make('Orders offers Notification' , "orders_offers_notifications")
+                ->trueValue(1)
+                ->falseValue(0),
+
+            Boolean::make('Messages Notifications' , "messages_notifications")
+                ->trueValue(1)
+                ->falseValue(0),
+
+            Boolean::make('Appointments Notifications' , "appointments_notifications")
+                ->trueValue(1)
+                ->falseValue(0),
+
+            Boolean::make('Allowed to Post' , "allowed_to_post")
+                ->trueValue(1)
+                ->falseValue(0),
+
+            Boolean::make('Is store' , "is_store")
+                ->trueValue(1)
+                ->falseValue(0),
+
+            Boolean::make('Block' , "block")
+                ->trueValue(1)
+                ->falseValue(0),
+
+            Text::make('Balance' , 'balance'),
+
             Password::make('Password')
                 ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
+            BelongsTo::make('Language' , 'languageNova' , LanguageNova::class),
+            BelongsTo::make('Membership' , 'membershipNova' , MembershipNova::class),
+            HasMany::make('Bank Accounts' , 'bankAccounts' , BankAccount::class),
         ];
     }
 

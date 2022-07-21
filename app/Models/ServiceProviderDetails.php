@@ -78,6 +78,11 @@ class ServiceProviderDetails extends MyModel
         return $q->where('status', 2);
     }
 
+    public function documents()
+    {
+        return $this->hasMany(ServiceProviderDetailDocuments::class , 'detail_id' , 'id');
+    }
+
     protected static function boot()
     {
         parent::boot();

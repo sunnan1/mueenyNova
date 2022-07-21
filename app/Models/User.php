@@ -136,6 +136,11 @@ class User extends Authenticatable implements UserInterface
         return $this->belongsTo(Language::class, 'language_id');
     }
 
+    public function languageNova()
+    {
+        return $this->belongsTo(\App\Models\LanguageNova::class, 'language_id' , 'id');
+    }
+
     public function languageLevel()
     {
         return $this->belongsToMany(Language::class, 'user_language', 'user_id', 'language_id');
@@ -215,6 +220,11 @@ class User extends Authenticatable implements UserInterface
     public function membership()
     {
         return $this->belongsTo(Membership::class, 'membership_id');
+    }
+
+    public function membershipNova()
+    {
+        return $this->belongsTo(MembershipNova::class, 'membership_id');
     }
 
     public function AdsFavorites()

@@ -3,6 +3,8 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
@@ -55,7 +57,16 @@ class Admin extends Resource
         }
         return [
             ID::make()->sortable(),
-
+            Avatar::make('Image', 'image')
+                ->disk('public')
+                ->resolveUsing(fn ($v) => $v ?: '')
+                ->store(function (Request $request, \App\Models\Admin $model) {
+                    if ($model->image) {
+                        Storage::disk('public')->delete($model->image);
+                    }
+                    return ['image' => $request->image->store('/uploads/admins', 'public')];
+                })
+                ->disableDownload(),
 //            Gravatar::make()->maxWidth(50),
 
             Text::make('Name')
@@ -90,8 +101,15 @@ class Admin extends Resource
 
             Boolean::make('Active' , "active")
                     ->trueValue(1)
-                    ->falseValue(0)
-                    ->onlyOnIndex(),
+                    ->falseValue(0),
+
+            Boolean::make('Is store' , "is_store")
+                ->trueValue(1)
+                ->falseValue(0),
+
+            Boolean::make('Block' , "block")
+                ->trueValue(1)
+                ->falseValue(0),
 
             Password::make('Password')
                 ->onlyOnForms()

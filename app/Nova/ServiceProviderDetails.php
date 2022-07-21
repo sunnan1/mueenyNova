@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
@@ -114,7 +115,19 @@ class ServiceProviderDetails extends Resource
                     if ($model->commercial_record_image) {
                         Storage::disk('public')->delete($model->commercial_record_image);
                     }
-                    return ['image' => $request->commercial_record_image->store('/uploads', 'public')];
+                    return ['commercial_record_image' => $request->commercial_record_image->store('/uploads/service_providers', 'public')];
+                })
+                ->exceptOnForms()
+                ->disableDownload(),
+
+            Avatar::make('ID Proof', 'id_proof')
+                ->disk('public')
+                ->resolveUsing(fn ($v) => $v ?: '')
+                ->store(function (Request $request, \App\Models\ServiceProviderDetails $model) {
+                    if ($model->id_proof) {
+                        Storage::disk('public')->delete($model->id_proof);
+                    }
+                    return ['id_proof' => $request->id_proof->store('/uploads/service_providers', 'public')];
                 })
                 ->exceptOnForms()
                 ->disableDownload(),
@@ -131,6 +144,7 @@ class ServiceProviderDetails extends Resource
             Boolean::make('Allowed to Offer' , 'allowed_to_offer')
                 ->trueValue(1)
                 ->falseValue(0),
+            HasMany::make('Documents' , 'documents' , ServiceProviderDetailDocuments::class),
         ];
     }
 
