@@ -47,8 +47,8 @@ class CurrencyNova extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name EN' , 'name_en'),
-            Text::make('Name AR' , 'name_ar'),
+            Text::make('Name English' , 'name_en'),
+            Text::make('Name Arabic' , 'name_ar'),
             Boolean::make('Active' , "active")
                 ->trueValue(1)
                 ->falseValue(0),

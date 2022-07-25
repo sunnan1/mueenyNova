@@ -52,26 +52,29 @@ class MembershipNova extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\MembershipNova $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads', 'public')];
+                    return ['image' => $request->image->store('/uploads/memberships', 'public')];
                 })
                 ->disableDownload(),
-            Text::make('Name EN' , 'name_en'),
-            Text::make('Name AR' , 'name_ar'),
+            Text::make('Name English' , 'name_en'),
+            Text::make('Name Arabic' , 'name_ar'),
             Boolean::make('Active' , "is_active")
                 ->trueValue(1)
                 ->falseValue(0),
-            Number::make('Points' , 'points'),
-            Text::make('Amount' , 'amount'),
+            Boolean::make('Default' , "default")
+                ->trueValue(1)
+                ->falseValue(0),
+            Number::make('Points to achieve' , 'points')->required(),
+            Text::make('Amount to gain' , 'amount')->required(),
             Select::make('Membership Type' , 'membership_type')->options([
                 'admins' => 'Admins',
                 'stores' => 'Stores'
             ]),
-            Text::make('Commission' , 'commission_percentage'),
+            Text::make('Commission percentage' , 'commission_percentage')->required(),
         ];
     }
 

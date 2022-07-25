@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\LanguageNova;
 use App\Models\SupportReasonNova;
 use App\Models\WelcomeScreenNova;
 use Illuminate\Database\Seeder;
@@ -16,7 +17,8 @@ class MainSeeder extends Seeder
     public function run()
     {
         //$this->supportReason();
-        $this->welcomeScreens();
+        //$this->welcomeScreens();
+        $this->languages();
 
     }
 
@@ -30,6 +32,28 @@ class MainSeeder extends Seeder
                 ] as $reason)
         {
             $support = new SupportReasonNova();
+            foreach($reason as $key => $val)
+            {
+                $support->{$key} = $val;
+            }
+            $support->save();
+        }
+    }
+
+    public function languages()
+    {
+        foreach([
+                    ['name_en' => 'Urdu' , 'name_ar' => 'أردو' , 'active' => 1 , 'position' => 1],
+                    ['name_en' => 'Arabic' , 'name_ar' => 'العربية' , 'active' => 1 , 'position' => 2],
+                    ['name_en' => 'English' , 'name_ar' => 'الانجليزية' , 'active' => 1 , 'position' => 3],
+                    ['name_en' => 'French' , 'name_ar' => 'الفرنسية' , 'active' => 1 , 'position' => 4],
+                    ['name_en' => 'Spanish' , 'name_ar' => 'الاسبانية' , 'active' => 1 , 'position' => 5],
+                    ['name_en' => 'Philippines' , 'name_ar' => 'فليبيني' , 'active' => 1 , 'position' => 6],
+                    ['name_en' => 'Bengali' , 'name_ar' => 'بنغالي' , 'active' => 1 , 'position' => 7],
+                    ['name_en' => 'Hindi' , 'name_ar' => 'هندي' , 'active' => 1 , 'position' => 8],
+                ] as $reason)
+        {
+            $support = new LanguageNova();
             foreach($reason as $key => $val)
             {
                 $support->{$key} = $val;

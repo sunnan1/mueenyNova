@@ -52,7 +52,7 @@ class AdvertisementBanner extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\AdvertisementBanner $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
