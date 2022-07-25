@@ -26,7 +26,7 @@ class SupportReasonNova extends Resource
      *
      * @var string
      */
-    public static $title = 'name_en';
+    public static $title = 'name_ar';
 
     /**
      * The columns that should be searched.
@@ -47,8 +47,8 @@ class SupportReasonNova extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name EN' , 'name_en'),
-            Text::make('Name AR' , 'name_ar'),
+            Text::make('Name English' , 'name_en'),
+            Text::make('Name Arabic' , 'name_ar'),
             Boolean::make('Status' , "status")
                 ->trueValue(1)
                 ->falseValue(0),

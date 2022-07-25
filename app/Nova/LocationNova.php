@@ -49,7 +49,7 @@ class LocationNova extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\LocationNova $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
@@ -57,8 +57,8 @@ class LocationNova extends Resource
                     return ['image' => $request->image->store('/uploads', 'public')];
                 })
                 ->disableDownload(),
-            Text::make('Name EN' , 'name_en'),
-            Text::make('Name AR' , 'name_ar'),
+            Text::make('Name English' , 'name_en'),
+            Text::make('Name Arabic' , 'name_ar'),
             Boolean::make('Active' , "active")
                 ->trueValue(1)
                 ->falseValue(0),

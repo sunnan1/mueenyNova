@@ -49,12 +49,12 @@ class WelcomeScreenNova extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\WelcomeScreenNova $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads', 'public')];
+                    return ['image' => $request->image->store('/uploads/welcome_screens', 'public')];
                 })
                 ->disableDownload(),
             Text::make('Title EN' , 'title_en'),
