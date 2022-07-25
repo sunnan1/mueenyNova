@@ -31,7 +31,9 @@ class ManualNotifications extends Resource
      */
     public static $title = 'title_en';
 
-
+    public static $search = [
+        'title_en','title_ar','data_en','data_ar'
+    ];
     /**
      * Get the fields displayed by the resource.
      *

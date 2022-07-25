@@ -37,7 +37,7 @@ class AdvertisementBanner extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'name'
     ];
 
     /**
@@ -57,7 +57,7 @@ class AdvertisementBanner extends Resource
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads', 'public')];
+                    return ['image' => $request->image->store('/uploads/advertisement_banners', 'public')];
                 })
                 ->disableDownload(),
             Text::make('Name' , 'name'),
@@ -66,7 +66,7 @@ class AdvertisementBanner extends Resource
                 ->trueValue(1)
                 ->falseValue(0),
             Number::make('Sort Order' , 'sort_order'),
-            BelongsTo::make('Category' , 'categorynova' , CategoryNova::class)
+            BelongsTo::make('Mother Category' , 'categorynova' , CategoryNova::class)
         ];
     }
 

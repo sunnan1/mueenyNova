@@ -31,7 +31,7 @@ class GeneratePoint extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'user_phone_number','bill_id','duration_return'
     ];
 
     /**
@@ -44,11 +44,11 @@ class GeneratePoint extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('User Phone Number' , 'user_phone_number')->nullable(),
+            Text::make('User Phone Number' , 'user_phone_number')->required(),
             Text::make('Bill ID' , 'bill_id')->nullable(),
-            Text::make('Amount' , 'amount'),
-            Number::make('Generated Points' , 'generated_points'),
-            Number::make('Duration Return' , 'duration_return'),
+            Text::make('Amount of purchase' , 'amount')->required(),
+            Number::make('Generated Points' , 'generated_points')->exceptOnForms(),
+            Number::make('Duration of return in days' , 'duration_return')->required(),
             Select::make('Status' , 'status')
                 ->options([
                     1 => 'Pending',

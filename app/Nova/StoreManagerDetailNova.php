@@ -38,7 +38,8 @@ class StoreManagerDetailNova extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'name',
+        'description',
     ];
 
     /**
@@ -53,7 +54,7 @@ class StoreManagerDetailNova extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Cover Image', 'cover_image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\StoreManagerDetailNova $model) {
                     if ($model->cover_image) {
                         Storage::disk('public')->delete($model->cover_image);
@@ -63,12 +64,12 @@ class StoreManagerDetailNova extends Resource
                 ->disableDownload(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\StoreManagerDetailNova $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads', 'public')];
+                    return ['image' => $request->image->store('/uploads/admins', 'public')];
                 })
                 ->disableDownload(),
             Text::make('Name' , 'name'),

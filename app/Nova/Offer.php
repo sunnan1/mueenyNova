@@ -31,7 +31,7 @@ class Offer extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'description','duration'
     ];
 
     /**

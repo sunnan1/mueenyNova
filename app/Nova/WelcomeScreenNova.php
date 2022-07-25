@@ -34,7 +34,8 @@ class WelcomeScreenNova extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'title_en',
+        'title_ar',
     ];
 
     /**

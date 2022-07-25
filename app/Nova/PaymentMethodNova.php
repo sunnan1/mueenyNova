@@ -36,7 +36,8 @@ class PaymentMethodNova extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'name_en',
+        'name_ar',
     ];
 
     /**

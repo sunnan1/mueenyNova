@@ -39,7 +39,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id', 'name', 'email', 'mobile'
     ];
 
     /**
@@ -61,7 +61,7 @@ class User extends Resource
 
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\User $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
@@ -93,6 +93,7 @@ class User extends Resource
                 ->sortable(),
 
             Date::make('Date of Birth' , 'dob'),
+            Text::make('Balance' , 'balance'),
 
             Select::make('Gender', "gender")
                 ->options([
@@ -104,37 +105,6 @@ class User extends Resource
             Boolean::make('Active' , "active")
                     ->trueValue(1)
                     ->falseValue(0),
-
-            Boolean::make('Service Provider' , "is_service_provider")
-                ->trueValue(1)
-                ->falseValue(0),
-
-            Boolean::make('Orders offers Notification' , "orders_offers_notifications")
-                ->trueValue(1)
-                ->falseValue(0),
-
-            Boolean::make('Messages Notifications' , "messages_notifications")
-                ->trueValue(1)
-                ->falseValue(0),
-
-            Boolean::make('Appointments Notifications' , "appointments_notifications")
-                ->trueValue(1)
-                ->falseValue(0),
-
-            Boolean::make('Allowed to Post' , "allowed_to_post")
-                ->trueValue(1)
-                ->falseValue(0),
-
-            Boolean::make('Is store' , "is_store")
-                ->trueValue(1)
-                ->falseValue(0),
-
-            Boolean::make('Block' , "block")
-                ->trueValue(1)
-                ->falseValue(0),
-
-            Text::make('Balance' , 'balance'),
-
             Password::make('Password')
                 ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')

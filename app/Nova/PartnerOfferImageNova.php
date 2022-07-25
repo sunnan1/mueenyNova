@@ -50,12 +50,12 @@ class PartnerOfferImageNova extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\PartnerOfferImageNova $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads', 'public')];
+                    return ['image' => $request->image->store('/uploads/partner_offers', 'public')];
                 })
                 ->disableDownload(),
             BelongsTo::make('Partner Offer' , 'partneroffer' , PartnerOfferNova::class),

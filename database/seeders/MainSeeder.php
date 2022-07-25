@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\CategoryNova;
 use App\Models\LanguageNova;
 use App\Models\SupportReasonNova;
 use App\Models\WelcomeScreenNova;
@@ -18,7 +20,8 @@ class MainSeeder extends Seeder
     {
         //$this->supportReason();
         //$this->welcomeScreens();
-        $this->languages();
+        //$this->languages();
+        $this->categories();
 
     }
 
@@ -37,6 +40,39 @@ class MainSeeder extends Seeder
                 $support->{$key} = $val;
             }
             $support->save();
+        }
+    }
+
+    public function categories()
+    {
+        $category = Category::with('translations')->get();
+        foreach ($category as $cat)
+        {
+            $catNova = new CategoryNova();
+            $nameEn = '';
+            $nameAr = '';
+            foreach($cat->translations as $trans)
+            {
+                if ($trans->locale === 'en')
+                {
+                    $nameEn = $trans->name;
+                }
+                if ($trans->locale === 'ar')
+                {
+                    $nameAr = $trans->name;
+                }
+            }
+            if ($nameAr != '')
+            {
+                $catNova->name_en = $nameEn;
+                $catNova->name_ar = $nameAr;
+                $catNova->active = $cat->active;
+                $catNova->image = $cat->image;
+                $catNova->partner = $cat->partner;
+                $catNova->position = $cat->position;
+                $catNova->level = $cat->level;
+                $catNova->save();
+            }
         }
     }
 

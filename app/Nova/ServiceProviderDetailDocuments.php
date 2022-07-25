@@ -51,7 +51,7 @@ class ServiceProviderDetailDocuments extends Resource
             })->asHtml(),
             Avatar::make('Document', 'document')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\ServiceProviderDetailDocuments $model) {
                     if ($model->document) {
                         Storage::disk('public')->delete($model->document);

@@ -40,7 +40,10 @@ class ServiceProviderDetails extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'name',
+        'email',
+        'mobile',
+        'nationality',
     ];
 
     /**
@@ -55,7 +58,7 @@ class ServiceProviderDetails extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\ServiceProviderDetails $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
@@ -66,7 +69,7 @@ class ServiceProviderDetails extends Resource
                 ->disableDownload(),
             Avatar::make('ID Image', 'id_image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\ServiceProviderDetails $model) {
                     if ($model->id_image) {
                         Storage::disk('public')->delete($model->id_image);
@@ -110,7 +113,7 @@ class ServiceProviderDetails extends Resource
             Text::make('Commercial Record' , 'commercial_record'),
             Avatar::make('Commercial Record', 'commercial_record_image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\ServiceProviderDetails $model) {
                     if ($model->commercial_record_image) {
                         Storage::disk('public')->delete($model->commercial_record_image);
@@ -122,7 +125,7 @@ class ServiceProviderDetails extends Resource
 
             Avatar::make('ID Proof', 'id_proof')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\ServiceProviderDetails $model) {
                     if ($model->id_proof) {
                         Storage::disk('public')->delete($model->id_proof);
@@ -194,5 +197,10 @@ class ServiceProviderDetails extends Resource
     public function actions(Request $request)
     {
         return [];
+    }
+
+    public static function label()
+    {
+        return 'Service Provider';
     }
 }

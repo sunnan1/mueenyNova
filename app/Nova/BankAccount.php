@@ -34,7 +34,7 @@ class BankAccount extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'bank_name', 'beneficiary_name' , 'account_number'
     ];
 
     /**
