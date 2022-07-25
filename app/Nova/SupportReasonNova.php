@@ -98,4 +98,9 @@ class SupportReasonNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Support Reasons';
+    }
 }

@@ -111,4 +111,10 @@ class CancellationReasonNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Cancellation Reasons';
+    }
+
 }

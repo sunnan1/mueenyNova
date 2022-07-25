@@ -87,10 +87,6 @@ INSERT INTO `addresses` VALUES (167,1,'3399 Ali Al Mufidi, Ar Rayyan, Riyadh 142
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `admins`
---
-
 DROP TABLE IF EXISTS `admins`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;

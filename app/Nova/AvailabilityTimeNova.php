@@ -99,4 +99,9 @@ class AvailabilityTimeNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Availability Times';
+    }
 }

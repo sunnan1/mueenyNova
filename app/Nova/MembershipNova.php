@@ -120,4 +120,9 @@ class MembershipNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Memberships';
+    }
 }

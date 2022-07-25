@@ -112,4 +112,9 @@ class SupportTicketNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Support Tickets';
+    }
 }

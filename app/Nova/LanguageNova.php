@@ -99,4 +99,9 @@ class LanguageNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Languages';
+    }
 }

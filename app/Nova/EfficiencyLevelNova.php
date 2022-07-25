@@ -99,4 +99,9 @@ class EfficiencyLevelNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Efficiency Level';
+    }
 }

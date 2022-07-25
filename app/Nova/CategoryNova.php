@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -49,7 +50,7 @@ class CategoryNova extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\CategoryNova $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
@@ -59,15 +60,29 @@ class CategoryNova extends Resource
                 ->disableDownload(),
             Text::make('Name EN' , 'name_en'),
             Text::make('Name AR' , 'name_ar'),
+            Select::make('Active' , 'active')
+                ->options([
+                    1 => 'Active',
+                    0 => 'Not Active',
+                ])
+                ->onlyOnForms()
+                ->rules('required'),
+
             Boolean::make('Active' , "active")
                 ->trueValue(1)
-                ->falseValue(0),
+                ->falseValue(0)->exceptOnForms(),
+
+            Select::make('Partner' , 'partner')
+                ->options([
+                    1 => 'Yes',
+                    0 => 'No',
+                ])
+                ->onlyOnForms(),
 
             Boolean::make('Partner' , "partner")
                 ->trueValue(1)
-                ->falseValue(0),
+                ->falseValue(0)->exceptOnForms(),
 
-            Number::make('Level' , 'level'),
             Number::make('Position' , 'position'),
             BelongsTo::make('Category' , 'category' , CategoryNova::class)->nullable(),
         ];
@@ -115,5 +130,10 @@ class CategoryNova extends Resource
     public function actions(Request $request)
     {
         return [];
+    }
+
+    public static function label()
+    {
+        return 'Categories';
     }
 }

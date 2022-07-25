@@ -59,7 +59,7 @@ class Admin extends Resource
             ID::make()->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '')
+                ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\Admin $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
@@ -84,7 +84,8 @@ class Admin extends Resource
                 ->onlyOnIndex(),
 
             Text::make('Phone')
-                ->sortable(),
+                ->sortable()
+                ->required(),
 
             Select::make('Country Code', "country_code")
                 ->options($codeOptions)
@@ -93,23 +94,15 @@ class Admin extends Resource
 
             Select::make('Active' , 'active')
                 ->options([
-                    '1' => 'Active',
-                    '0' => 'Not Active',
+                    1 => 'Active',
+                    0 => 'Not Active',
                 ])
                 ->onlyOnForms()
                 ->rules('required'),
 
             Boolean::make('Active' , "active")
                     ->trueValue(1)
-                    ->falseValue(0),
-
-            Boolean::make('Is store' , "is_store")
-                ->trueValue(1)
-                ->falseValue(0),
-
-            Boolean::make('Block' , "block")
-                ->trueValue(1)
-                ->falseValue(0),
+                    ->falseValue(0)->exceptOnForms(),
 
             Password::make('Password')
                 ->onlyOnForms()

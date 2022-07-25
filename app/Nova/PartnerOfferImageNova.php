@@ -105,4 +105,9 @@ class PartnerOfferImageNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Partner Offer Images';
+    }
 }

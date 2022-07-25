@@ -99,4 +99,9 @@ class TransportationNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Translations';
+    }
 }

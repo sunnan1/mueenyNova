@@ -128,4 +128,9 @@ class StoreManagerDetailNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Store Manager Details';
+    }
 }

@@ -98,4 +98,9 @@ class ReportReasonNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Report Reasons';
+    }
 }

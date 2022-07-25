@@ -103,4 +103,9 @@ class CurrencyNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Currency';
+    }
 }

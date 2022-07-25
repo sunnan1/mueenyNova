@@ -111,4 +111,9 @@ class WelcomeScreenNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Welcome Screens';
+    }
 }

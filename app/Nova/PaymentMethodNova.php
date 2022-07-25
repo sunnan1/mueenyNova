@@ -112,4 +112,9 @@ class PaymentMethodNova extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Payment Methods';
+    }
 }
