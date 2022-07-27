@@ -44,17 +44,22 @@ class GeneratePoint extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('User Phone Number' , 'user_phone_number')->required(),
-            Text::make('Bill ID' , 'bill_id')->nullable(),
-            Text::make('Amount of purchase' , 'amount')->required(),
+            Text::make('User Phone Number' , 'user_phone_number')
+                ->rules('required', 'max:255'),
+            Text::make('Bill ID' , 'bill_id')
+                ->rules('required', 'max:255'),
+            Text::make('Amount of purchase' , 'amount')
+                ->rules('required', 'max:255'),
             Number::make('Generated Points' , 'generated_points')->exceptOnForms(),
-            Number::make('Duration of return in days' , 'duration_return')->required(),
+            Number::make('Duration of return in days' , 'duration_return')
+                ->rules('required', 'max:255'),
             Select::make('Status' , 'status')
                 ->options([
                     1 => 'Pending',
                     2 => 'Active',
                     3 => 'Returned'
-                ])->onlyOnForms(),
+                ])->onlyOnForms()
+                ->rules('required'),
             Text::make('Status')->displayUsing(function() {
                 if ($this->status == 1)
                 {

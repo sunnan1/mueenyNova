@@ -21,8 +21,7 @@ class MainSeeder extends Seeder
         //$this->supportReason();
         //$this->welcomeScreens();
         //$this->languages();
-        $this->categories();
-
+        //$this->categories();
     }
 
     public function supportReason()

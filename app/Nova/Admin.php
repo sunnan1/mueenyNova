@@ -76,8 +76,8 @@ class Admin extends Resource
             Text::make('Email')
                 ->sortable()
                 ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
+                ->creationRules('unique:admins,email')
+                ->updateRules('unique:admins,email,{{resourceId}}'),
 
             Text::make('Country Code')
                 ->sortable()
@@ -85,7 +85,9 @@ class Admin extends Resource
 
             Text::make('Phone')
                 ->sortable()
-                ->required(),
+                ->rules('required', 'max:15')
+                ->creationRules('unique:admins,phone')
+                ->updateRules('unique:admins,phone,{{resourceId}}'),
 
             Select::make('Country Code', "country_code")
                 ->options($codeOptions)

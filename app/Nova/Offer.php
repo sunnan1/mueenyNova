@@ -25,6 +25,8 @@ class Offer extends Resource
      */
     public static $title = 'description';
 
+    public static $displayInNavigation = false;
+
     /**
      * The columns that should be searched.
      *
@@ -114,4 +116,5 @@ class Offer extends Resource
     {
         return [];
     }
+
 }

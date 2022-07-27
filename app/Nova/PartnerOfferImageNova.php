@@ -29,6 +29,7 @@ class PartnerOfferImageNova extends Resource
      */
     public static $title = 'name_en';
 
+    public static $displayInNavigation = false;
     /**
      * The columns that should be searched.
      *

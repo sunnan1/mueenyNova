@@ -95,4 +95,9 @@ class ManualNotifications extends Resource
     {
         return [];
     }
+
+    public static function label()
+    {
+        return 'Notifications';
+    }
 }

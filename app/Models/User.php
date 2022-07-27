@@ -68,6 +68,10 @@ class User extends Authenticatable implements UserInterface
     {
         return $this->belongsToMany(Transportation::class, 'user_transportation', 'user_id', 'transportation_id');
     }
+    public function transportationNova()
+    {
+        return $this->belongsToMany(TransportationNova::class, 'user_transportation', 'user_id', 'transportation_id');
+    }
     protected $hidden =
     [
         'password', 'orders_offers_notifications', 'messages_notifications', 'appointments_notifications',
