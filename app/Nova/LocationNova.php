@@ -57,14 +57,24 @@ class LocationNova extends Resource
                     return ['image' => $request->image->store('/uploads/locations', 'public')];
                 })
                 ->disableDownload(),
-            Text::make('Name English' , 'name_en'),
-            Text::make('Name Arabic' , 'name_ar'),
+            Text::make('Name English' , 'name_en')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:location_novas,name_en')
+                ->updateRules('unique:location_novas,name_en,{{resourceId}}'),
+            Text::make('Name Arabic' , 'name_ar')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:location_novas,name_ar')
+                ->updateRules('unique:location_novas,name_ar,{{resourceId}}'),
             Boolean::make('Active' , "active")
                 ->trueValue(1)
-                ->falseValue(0),
-            Number::make('Level' , 'level'),
-            Number::make('Position' , 'position'),
-            Number::make('Dial Code' , 'dial_code'),
+                ->falseValue(0)
+                ->rules('required'),
+            Number::make('Level' , 'level')
+                ->rules('required'),
+            Number::make('Position' , 'position')
+                ->rules('required'),
+            Number::make('Dial Code' , 'dial_code')
+                ->rules('required'),
             BelongsTo::make('Location' , 'location' , LocationNova::class)->nullable(),
         ];
     }

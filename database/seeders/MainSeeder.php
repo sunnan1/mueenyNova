@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\CategoryNova;
 use App\Models\LanguageNova;
+use App\Models\Location;
+use App\Models\LocationNova;
 use App\Models\SupportReasonNova;
 use App\Models\WelcomeScreenNova;
 use Illuminate\Database\Seeder;
@@ -22,6 +24,7 @@ class MainSeeder extends Seeder
         //$this->welcomeScreens();
         //$this->languages();
         //$this->categories();
+        //$this->locations();
     }
 
     public function supportReason()
@@ -61,7 +64,7 @@ class MainSeeder extends Seeder
                     $nameAr = $trans->name;
                 }
             }
-            if ($nameAr != '')
+            if ($nameEn != '')
             {
                 $catNova->name_en = $nameEn;
                 $catNova->name_ar = $nameAr;
@@ -70,6 +73,39 @@ class MainSeeder extends Seeder
                 $catNova->partner = $cat->partner;
                 $catNova->position = $cat->position;
                 $catNova->level = $cat->level;
+                $catNova->save();
+            }
+        }
+    }
+
+    public function locations()
+    {
+        $category = Location::with('translations')->get();
+        foreach ($category as $cat)
+        {
+            $catNova = new LocationNova();
+            $nameEn = '';
+            $nameAr = '';
+            foreach($cat->translations as $trans)
+            {
+                if ($trans->locale === 'en')
+                {
+                    $nameEn = $trans->name;
+                }
+                if ($trans->locale === 'ar')
+                {
+                    $nameAr = $trans->name;
+                }
+            }
+            if ($nameEn != '')
+            {
+                $catNova->name_en = $nameEn;
+                $catNova->name_ar = $nameAr;
+                $catNova->active = $cat->active;
+                $catNova->image = $cat->image;
+                $catNova->level = $cat->level;
+                $catNova->position = $cat->position;
+                $catNova->dial_code = $cat->dial_code;
                 $catNova->save();
             }
         }
