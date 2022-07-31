@@ -50,23 +50,24 @@ class Advertisement extends Resource
     {
         $columns =  [
             ID::make(__('ID'), 'id')->sortable(),
+            Image::make('Profile Photo')->disk('public')->exceptOnForms(),
             Text::make('Full Name')->displayUsing(function (){
                 return $this->user->name;
             })->exceptOnForms(),
             Text::make('Email')->displayUsing(function (){
                 return $this->user->email;
             })->exceptOnForms(),
-            Image::make('Profile Photo')->disk('public')->exceptOnForms(),
+            Date::make('Date' , 'date'),
+            Date::make('Updated At' , 'updated_at')->exceptOnForms(),
             Text::make('Title' , 'title')->exceptOnForms(),
-            Text::make('Description' , 'description')->exceptOnForms(),
-            Select::make('Type' , 'type')->options([
-                1 => 'In Location',
-                2 => 'Remotely'
-            ])->onlyOnForms(),
-            Select::make('Payment Status' , 'payment_status')->options([
-                0 => 'Pending',
-                1 => 'Paid'
-            ])->onlyOnForms(),
+            Text::make('Offers')->displayUsing(function(){
+               return $this->offers->count();
+            })->exceptOnForms(),
+            Text::make('Budget' , 'budget'),
+            Text::make('Type')->displayUsing(function () {
+                return $this->type == 1 ? 'In Location' : ($this->type == 2 ? 'Remotely' : "");
+            })->exceptOnForms(),
+            Text::make('Description' , 'description')->onlyOnDetail(),
             Select::make('Status' , 'status')->options([
                 0 => 'Waiting for acceptance',
                 1 => 'Active',
@@ -77,17 +78,26 @@ class Advertisement extends Resource
             Text::make('Type' , 'type')->displayUsing(function (){
                 return $this->type == 1 ? 'In Location' : ($this->type == 2 ? 'Remotely' : '');
             })->exceptOnForms(),
-            Date::make('Date' , 'date'),
-            Text::make('Budget' , 'budget'),
-            Text::make('Commission' , 'commission'),
+            Text::make('Commission' , 'commission')->exceptOnForms(),
             Text::make('Payment Status' , 'payment_status')->displayUsing(function (){
                 return $this->type == 0 ? 'Pending' : ($this->type == 1 ? 'Paid' : '');
-            })->exceptOnForms(),
+            })->onlyOnDetail(),
             BelongsTo::make('User' , 'user' , User::class)->exceptOnForms(),
             BelongsTo::make('Payment Method' , 'paymentMethodNova' , PaymentMethodNova::class)->exceptOnForms(),
+            BelongsTo::make('Service Provider' , 'serviceProvider' , ServiceProviderDetails::class)->exceptOnForms(),
             BelongsTo::make('Main Category' , 'categoryNova' , CategoryNova::class)->exceptOnForms(),
             BelongsTo::make('Sub Category' , 'subCategoryNova' , CategoryNova::class)->exceptOnForms(),
             HasMany::make('Offers', 'offers' , Offer::class),
+            HasMany::make('Requirements', 'requirements' , Requirement::class),
+            HasMany::make('Reports', 'reports' , OrderReport::class),
+            Text::make('Locations')->displayUsing(function() {
+               $address = [];
+               foreach($this->user->address as $add)
+               {
+                   $address[] = $add->description;
+               }
+               return implode(', ', $address);
+            })->exceptOnForms(),
             Text::make('Status' , 'status')->displayUsing(function (){
                 if ($this->status == 0)
                 {
@@ -111,6 +121,7 @@ class Advertisement extends Resource
                 }
             })->exceptOnForms(),
             Text::make('Invoice Number' , 'invoice_number')->exceptOnForms(),
+            Text::make('RRN' , 'rrn')->exceptOnForms(),
             ];
             $additional = [];
             if ($this->status === 2)

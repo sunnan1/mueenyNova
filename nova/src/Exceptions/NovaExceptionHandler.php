@@ -29,7 +29,7 @@ class NovaExceptionHandler extends ExceptionHandler
     }
 
     /**
-     * Report or log an exception.
+     * OrderReport or log an exception.
      *
      * @param  \Throwable  $e
      * @return mixed

@@ -12,6 +12,11 @@ class OrderReport extends MyModel
         return $this->belongsTo(ReportReason::class, 'report_reason_id');
     }
 
+    public function reasonNova()
+    {
+        return $this->belongsTo(\App\Models\ReportReasonNova::class, 'report_reason_id' , 'id');
+    }
+
     public function translations()
     {
         return $this->hasMany(PartnerOfferTranslation::class, 'partner_offer_id');

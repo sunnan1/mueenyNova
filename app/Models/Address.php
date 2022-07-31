@@ -3,9 +3,9 @@
 namespace App\Models;
 
 class Address extends MyModel {
- 
+
     protected $table = "addresses";
-    
+
     protected $casts = [
         'id' => 'integer',
         'lat' => 'double',
@@ -32,12 +32,17 @@ class Address extends MyModel {
         parent::boot();
 
         static::deleting(function(Address $address) {
-          
+
         });
-        
+
         static::deleted(function (Address $address) {
-           
+
         });
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class , 'user_id');
     }
 
 }
