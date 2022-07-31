@@ -85,7 +85,7 @@ class Admin extends Resource
 
             Text::make('Phone')
                 ->sortable()
-                ->rules('required', 'max:15')
+                ->rules('required', 'min:7', 'max:15')
                 ->creationRules('unique:admins,phone')
                 ->updateRules('unique:admins,phone,{{resourceId}}'),
 
@@ -94,17 +94,9 @@ class Admin extends Resource
                 ->onlyOnForms()
                 ->rules('required'),
 
-            Select::make('Active' , 'active')
-                ->options([
-                    1 => 'Active',
-                    0 => 'Not Active',
-                ])
-                ->onlyOnForms()
-                ->rules('required'),
-
             Boolean::make('Active' , "active")
                     ->trueValue(1)
-                    ->falseValue(0)->exceptOnForms(),
+                    ->falseValue(0),
 
             Password::make('Password')
                 ->onlyOnForms()
