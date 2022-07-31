@@ -54,7 +54,7 @@ class LocationNova extends Resource
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads', 'public')];
+                    return ['image' => $request->image->store('/uploads/locations', 'public')];
                 })
                 ->disableDownload(),
             Text::make('Name English' , 'name_en'),

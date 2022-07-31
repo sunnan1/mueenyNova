@@ -55,7 +55,7 @@ class CategoryNova extends Resource
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads', 'public')];
+                    return ['image' => $request->image->store('/uploads/categories', 'public')];
                 })
                 ->disableDownload(),
             Text::make('Name EN' , 'name_en'),
