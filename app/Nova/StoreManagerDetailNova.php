@@ -72,15 +72,27 @@ class StoreManagerDetailNova extends Resource
                     return ['image' => $request->image->store('/uploads/admins', 'public')];
                 })
                 ->disableDownload(),
-            Text::make('Name' , 'name'),
-            Text::make('Description' , 'description'),
-            Date::make('Date of Joining' , 'doj'),
-            BelongsTo::make('Category' , 'category' , CategoryNova::class),
-            BelongsTo::make('Country' , 'country' , LocationNova::class),
-            BelongsTo::make('City' , 'city' , LocationNova::class),
-            BelongsTo::make('Region' , 'region' , LocationNova::class),
-            BelongsTo::make('Membership' , 'membership' , MembershipNova::class),
-            BelongsTo::make('Admin' , 'admin' , Admin::class),
+            Text::make('Store Name' , 'name')->rules('required'),
+            Text::make('Name')->displayUsing(function() {
+                return ($this->admin) ? $this->admin->name : "";
+            })->exceptOnForms(),
+            Text::make('Description' , 'description')->rules('required')->onlyOnForms(),
+            Date::make('Date of Joining' , 'doj')->rules('required')->onlyOnForms(),
+            BelongsTo::make('Store Type' , 'category' , CategoryNova::class)->rules('required')->onlyOnForms(),
+            BelongsTo::make('Country' , 'country' , LocationNova::class)->onlyOnForms(),
+            BelongsTo::make('City' , 'city' , LocationNova::class)->onlyOnForms(),
+            BelongsTo::make('Region' , 'region' , LocationNova::class)->onlyOnForms(),
+            BelongsTo::make('Membership' , 'membership' , MembershipNova::class)->onlyOnForms(),
+            Text::make('Email')->displayUsing(function() {
+                return ($this->admin) ? $this->admin->email : "";
+            })->exceptOnForms(),
+            Text::make('Phone')->displayUsing(function() {
+                return ($this->admin) ? $this->admin->phone : "";
+            })->exceptOnForms(),
+            Text::make('Status')->displayUsing(function() {
+                return ($this->admin) ? ($this->admin->active == 1 ? "Active" : "Not Active") : "";
+            })->exceptOnForms(),
+            BelongsTo::make('Admin' , 'admin' , Admin::class)->rules('required')->onlyOnForms(),
         ];
     }
 

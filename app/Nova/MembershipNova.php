@@ -60,21 +60,29 @@ class MembershipNova extends Resource
                     return ['image' => $request->image->store('/uploads/memberships', 'public')];
                 })
                 ->disableDownload(),
-            Text::make('Name English' , 'name_en'),
-            Text::make('Name Arabic' , 'name_ar'),
+            Text::make('Name English' , 'name_en')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:membership_novas,name_en')
+                ->updateRules('unique:membership_novas,name_en,{{resourceId}}'),
+            Text::make('Name Arabic' , 'name_ar')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:membership_novas,name_ar')
+                ->updateRules('unique:membership_novas,name_ar,{{resourceId}}'),
             Boolean::make('Active' , "is_active")
                 ->trueValue(1)
                 ->falseValue(0),
             Boolean::make('Default' , "default")
                 ->trueValue(1)
                 ->falseValue(0),
-            Number::make('Points to achieve' , 'points')->required(),
-            Text::make('Amount to gain' , 'amount')->required(),
+            Number::make('Points to achieve' , 'points')
+                ->rules('required', 'numeric'),
+            Text::make('Amount to gain' , 'amount')
+                ->rules('required', 'numeric'),
             Select::make('Membership Type' , 'membership_type')->options([
                 'admins' => 'Admins',
                 'stores' => 'Stores'
-            ]),
-            Text::make('Commission percentage' , 'commission_percentage')->required(),
+            ])->rules('required'),
+            Text::make('Commission percentage' , 'commission_percentage')->rules('required'),
         ];
     }
 

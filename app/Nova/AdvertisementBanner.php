@@ -60,13 +60,17 @@ class AdvertisementBanner extends Resource
                     return ['image' => $request->image->store('/uploads/advertisement_banners', 'public')];
                 })
                 ->disableDownload(),
-            Text::make('Name' , 'name'),
-            Text::make('Link' , 'link'),
+            Text::make('Name' , 'name')
+                ->rules('required')
+                ->creationRules('unique:advertisement_banners,name')
+                ->updateRules('unique:advertisement_banners,name,{{resourceId}}'),
+            Text::make('Link' , 'link')
+                ->rules('required', 'min:1'),
             Boolean::make('Active' , "active")
                 ->trueValue(1)
                 ->falseValue(0),
-            Number::make('Sort Order' , 'sort_order'),
-            BelongsTo::make('Mother Category' , 'categorynova' , CategoryNova::class)
+            Number::make('Sort Order' , 'sort_order')->rules('required'),
+            BelongsTo::make('Mother Category' , 'categorynova' , CategoryNova::class)->rules('nullable')
         ];
     }
 

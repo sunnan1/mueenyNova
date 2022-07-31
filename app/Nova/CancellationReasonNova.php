@@ -48,15 +48,22 @@ class CancellationReasonNova extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name English' , 'name_en'),
-            Text::make('Name Arabic' , 'name_ar'),
+            Text::make('Name English' , 'name_en')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:currency_novas,name_en')
+                ->updateRules('unique:currency_novas,name_en,{{resourceId}}'),
+            Text::make('Name Arabic' , 'name_ar')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:currency_novas,name_ar')
+                ->updateRules('unique:currency_novas,name_ar,{{resourceId}}'),
             Boolean::make('Status' , "active")
                 ->trueValue(1)
                 ->falseValue(0),
             Select::make('Type' , 'type')->options([
                 1 => 'Ad',
                 2 => 'Offer'
-            ])->onlyOnForms(),
+            ])->onlyOnForms()
+                ->rules('required'),
             Text::make('Type')->displayUsing(function (){
                 if ($this->type == 1){
                     return 'Ad';
@@ -64,7 +71,8 @@ class CancellationReasonNova extends Resource
                     return 'Offer';
                 }
             })->exceptOnForms(),
-            Number::make('Position' , 'position'),
+            Number::make('Position' , 'position')
+                ->rules('required'),
         ];
     }
 
