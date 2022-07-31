@@ -13,4 +13,9 @@ class PartnerOfferNova extends Model
     {
         return $this->hasMany(PartnerOfferImageNova::class , 'partner_offer_id' , 'id');
     }
+
+    public function admins()
+    {
+        return $this->belongsTo(Admin::class , 'store_id' , 'id')->where('is_store' , '=' , 1);
+    }
 }

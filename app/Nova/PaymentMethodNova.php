@@ -50,8 +50,14 @@ class PaymentMethodNova extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name EN' , 'name_en'),
-            Text::make('Name AR' , 'name_ar'),
+            Text::make('Name EN' , 'name_en')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:payment_method_novas,name_en')
+                ->updateRules('unique:payment_method_novas,name_en,{{resourceId}}'),
+            Text::make('Name AR' , 'name_ar')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:payment_method_novas,name_ar')
+                ->updateRules('unique:payment_method_novas,name_ar,{{resourceId}}'),
             Select::make('Status' , 'status')->options([
                 0 => 'Active',
                 1 => 'Not Active'
@@ -66,7 +72,8 @@ class PaymentMethodNova extends Resource
             Select::make('Type' , 'type')->options([
                 'online' => 'Online',
                 'offline' => 'Offline'
-            ]),
+            ])
+                ->rules('required'),
         ];
     }
 

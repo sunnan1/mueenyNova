@@ -49,8 +49,9 @@ class PartnerOfferNova extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name EN' , 'name_en'),
-            Text::make('Name AR' , 'name_ar'),
+            Text::make('Name EN' , 'name_en')->rules('required'),
+            Text::make('Name AR' , 'name_ar')->rules('required'),
+            BelongsTo::make('Admin Store' , 'admins' , Admin::class)->rules('required'),
             HasMany::make('Images', 'images' , PartnerOfferImageNova::class)
         ];
     }
