@@ -9,6 +9,7 @@
         "chaseconey/nova-external-image": "^0.3.1",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.4",
+        "laravel-notification-channels/fcm": "~2.0",
         "laravel/framework": "^8.54",
         "laravel/nova": "*",
         "laravel/sanctum": "^2.11",
