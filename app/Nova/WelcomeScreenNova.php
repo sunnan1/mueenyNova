@@ -58,14 +58,25 @@ class WelcomeScreenNova extends Resource
                     return ['image' => $request->image->store('/uploads/welcome_screens', 'public')];
                 })
                 ->disableDownload(),
-            Text::make('Title EN' , 'title_en'),
-            Text::make('Title AR' , 'title_ar'),
-            Text::make('Description EN' , 'description_en'),
-            Text::make('Description AR' , 'description_ar'),
+            Text::make('Title EN' , 'title_en')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:welcome_screen_novas,title_en')
+                ->updateRules('unique:welcome_screen_novas,title_en,{{resourceId}}'),
+            Text::make('Title AR' , 'title_ar')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:welcome_screen_novas,title_ar')
+                ->updateRules('unique:welcome_screen_novas,title_ar,{{resourceId}}'),
+            Text::make('Description EN' , 'description_en')
+                ->onlyOnForms()
+                ->rules('required', 'min:1'),
+            Text::make('Description AR' , 'description_ar')
+                ->onlyOnForms()
+                ->rules('required', 'min:1'),
             Boolean::make('Active' , "active")
                 ->trueValue(1)
-                ->falseValue(0),
-            Number::make('Position' , 'position'),
+                ->falseValue(0)
+                ->rules('required'),
+            Number::make('Position' , 'position')->rules('required'),
         ];
     }
 
