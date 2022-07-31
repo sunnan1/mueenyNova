@@ -87,13 +87,16 @@ class User extends Resource
                 ->rules('required'),
 
             Text::make('Phone' , 'mobile')
-                ->sortable(),
+                ->sortable()
+                ->rules('required', 'min:7', 'max:15')
+                ->creationRules('unique:users,mobile')
+                ->updateRules('unique:users,mobile,{{resourceId}}'),
 
             Text::make('Bio')
                 ->sortable(),
 
             Date::make('Date of Birth' , 'dob'),
-            Text::make('Balance' , 'balance'),
+            Text::make('Balance' , 'balance')->rules('numeric'),
 
             Select::make('Gender', "gender")
                 ->options([
@@ -105,11 +108,20 @@ class User extends Resource
             Boolean::make('Active' , "active")
                     ->trueValue(1)
                     ->falseValue(0),
+            Boolean::make('Allowed to Post' , "allowed_to_post")
+                ->trueValue(1)
+                ->falseValue(0),
+            Boolean::make('Is Service Provider' , "is_service_provider")
+                ->trueValue(1)
+                ->falseValue(0)->exceptOnForms(),
+            Boolean::make('Is Store' , "is_store")
+                ->trueValue(1)
+                ->falseValue(0)->exceptOnForms(),
             Password::make('Password')
                 ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')
                 ->updateRules('nullable', 'string', 'min:8'),
-            BelongsTo::make('Language' , 'languageNova' , LanguageNova::class),
+            BelongsTo::make('Mother language' , 'languageNova' , LanguageNova::class),
             BelongsTo::make('Membership' , 'membershipNova' , MembershipNova::class),
             HasMany::make('Bank Accounts' , 'bankAccounts' , BankAccount::class),
         ];
