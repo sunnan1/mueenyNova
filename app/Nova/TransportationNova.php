@@ -48,12 +48,19 @@ class TransportationNova extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name EN' , 'name_en'),
-            Text::make('Name AR' , 'name_ar'),
+            Text::make('Name EN' , 'name_en')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:transportation_novas,name_en')
+                ->updateRules('unique:transportation_novas,name_en,{{resourceId}}'),
+            Text::make('Name AR' , 'name_ar')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:transportation_novas,name_ar')
+                ->updateRules('unique:transportation_novas,name_ar,{{resourceId}}'),
             Boolean::make('Active' , "active")
                 ->trueValue(1)
                 ->falseValue(0),
-            Number::make('Position' , 'position'),
+            Number::make('Position' , 'position')
+                ->rules('required'),
         ];
     }
 
@@ -103,6 +110,6 @@ class TransportationNova extends Resource
 
     public static function label()
     {
-        return 'Translations';
+        return 'Transportations';
     }
 }
