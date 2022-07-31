@@ -48,8 +48,12 @@ class SupportReasonNova extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name English' , 'name_en'),
-            Text::make('Name Arabic' , 'name_ar'),
+            Text::make('Name English' , 'name_en')
+                ->creationRules('unique:support_reason_novas,name_en')
+                ->updateRules('unique:support_reason_novas,name_en,{{resourceId}}'),
+            Text::make('Name Arabic' , 'name_ar')
+                ->creationRules('unique:support_reason_novas,name_ar')
+                ->updateRules('unique:support_reason_novas,name_ar,{{resourceId}}'),
             Boolean::make('Status' , "status")
                 ->trueValue(1)
                 ->falseValue(0),

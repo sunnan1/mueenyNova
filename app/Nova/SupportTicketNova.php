@@ -49,8 +49,8 @@ class SupportTicketNova extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name' , 'name'),
-            Text::make('Message' , 'message'),
+            Text::make('Name' , 'name')->rules('required'),
+            Text::make('Message' , 'message')->rules('required'),
             Text::make('Status')->displayUsing(function (){
                 if ($this->status == 0){
                     return 'Open';
@@ -59,14 +59,18 @@ class SupportTicketNova extends Resource
                 }elseif ($this->status == 2){
                     return 'Closed';
                 }
-            })->exceptOnForms(),
+            })->exceptOnForms()
+                ->rules('required'),
             Select::make('Status' , 'status')->options([
                 0 => 'Open',
                 1 => 'Pending',
                 2 => 'Closed'
-            ])->onlyOnForms(),
-            BelongsTo::make('Support Reason' , 'reason' , SupportReasonNova::class),
-            BelongsTo::make('User' , 'user' , User::class),
+            ])->onlyOnForms()
+                ->rules('required'),
+            BelongsTo::make('Support Reason' , 'reason' , SupportReasonNova::class)
+                ->rules('required'),
+            BelongsTo::make('User' , 'user' , User::class)
+                ->rules('required'),
         ];
     }
 
