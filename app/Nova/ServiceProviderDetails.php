@@ -78,13 +78,8 @@ class ServiceProviderDetails extends Resource
                 })
                 ->exceptOnForms()
                 ->disableDownload(),
-            Select::make('Type' , 'type')->options([
-                1 => 'Individual',
-                2 => 'Company'
-            ])->onlyOnForms(),
-            Text::make('Type' , 'type')->displayUsing(function (){
-                return $this->type == 1 ? 'Individual' : ($this->type == 2 ? 'Company' : '');
-            })->exceptOnForms(),
+
+
             Select::make('Status' , 'status')->options([
                 0 => 'Pending',
                 1 => 'Accepted',
@@ -107,11 +102,18 @@ class ServiceProviderDetails extends Resource
             Text::make('Name' , 'name'),
             Text::make('Email' , 'email'),
             Text::make('Mobile' , 'mobile'),
-            Text::make('Description' , 'description'),
+            Text::make('Type' , 'type')->displayUsing(function (){
+                return $this->type == 1 ? 'Individual' : ($this->type == 2 ? 'Company' : '');
+            })->exceptOnForms(),
+            Text::make('Description' , 'description')->onlyOnDetail(),
             Text::make('Nationality' , 'nationality'),
             Date::make('Date of Birth' , 'user.dob'),
             Text::make('Commercial Record' , 'commercial_record'),
-            Avatar::make('Commercial Record', 'commercial_record_image')
+            Select::make('Type' , 'type')->options([
+                1 => 'Individual',
+                2 => 'Company'
+            ])->onlyOnForms(),
+            Avatar::make('Commercial Record Image', 'commercial_record_image')
                 ->disk('public')
                 ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\ServiceProviderDetails $model) {
@@ -139,7 +141,15 @@ class ServiceProviderDetails extends Resource
             BelongsTo::make('Operated By' , 'admin' , Admin::class),
             Text::make('Bank Account')->displayUsing(function(){
                return $this->user->bankAccounts()->count();
-            }),
+            })->onlyOnDetail(),
+            Text::make('Locations')->displayUsing(function() {
+                $address = [];
+                foreach($this->user->address as $add)
+                {
+                    $address[] = $add->description;
+                }
+                return implode(', ', $address);
+            })->onlyOnDetail(),
             Text::make('Balance' , 'balance'),
             Boolean::make('Block' , 'block')
                 ->trueValue(1)

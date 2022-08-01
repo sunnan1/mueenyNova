@@ -3,9 +3,9 @@
 namespace App\Models;
 
 class Certification extends MyModel {
- 
+
     protected $table = "certifications";
-    
+
     protected $casts = [
         'id' => 'integer'
     ];
@@ -26,12 +26,16 @@ class Certification extends MyModel {
         parent::boot();
 
         static::deleting(function(Certification $certification) {
-          
+
         });
-        
+
         static::deleted(function (Certification $certification) {
            $certification->deleteUploaded('certifications', $certification->image);
         });
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class , 'user_id' , 'id');
     }
 
 }

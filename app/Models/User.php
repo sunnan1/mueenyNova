@@ -199,9 +199,6 @@ class User extends Authenticatable implements UserInterface
     {
         return $this->hasMany(Rate::class, 'rated_id');
     }
-
-
-
     public function serviceProvider()
     {
         return $this->hasOne(ServiceProviderDetails::class, 'user_id');

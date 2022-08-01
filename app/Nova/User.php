@@ -125,6 +125,7 @@ class User extends Resource
             BelongsTo::make('Membership' , 'membershipNova' , MembershipNova::class),
             HasMany::make('Bank Accounts' , 'bankAccounts' , BankAccount::class),
             HasMany::make('Locations' , 'address' , Address::class),
+            HasMany::make('Certifications' , 'certifications' , Certification::class),
         ];
     }
 

@@ -97,7 +97,7 @@ class Advertisement extends Resource
                    $address[] = $add->description;
                }
                return implode(', ', $address);
-            })->exceptOnForms(),
+            })->onlyOnDetail(),
             Text::make('Status' , 'status')->displayUsing(function (){
                 if ($this->status == 0)
                 {
