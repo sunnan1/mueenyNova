@@ -105,9 +105,21 @@ class User extends Resource
                 ])->onlyOnForms(),
             Text::make('Gender' , 'gender')->exceptOnForms(),
 
-            Boolean::make('Active' , "active")
+            Boolean::make('Status' , "active")
                     ->trueValue(1)
                     ->falseValue(0),
+            Boolean::make('Blocked' , "block")
+                ->trueValue(1)
+                ->falseValue(0)->onlyOnDetail(),
+            Boolean::make('Orders offer notifications' , "orders_offers_notifications")
+                ->trueValue(1)
+                ->falseValue(0)->onlyOnDetail(),
+            Boolean::make('Message Notifications' , "messages_notifications")
+                ->trueValue(1)
+                ->falseValue(0)->onlyOnDetail(),
+            Boolean::make('Appointments Notifications' , "appointments_notifications")
+                ->trueValue(1)
+                ->falseValue(0)->onlyOnDetail(),
             Boolean::make('Allowed to Post' , "allowed_to_post")
                 ->trueValue(1)
                 ->falseValue(0),
@@ -117,6 +129,7 @@ class User extends Resource
             Boolean::make('Is Store' , "is_store")
                 ->trueValue(1)
                 ->falseValue(0)->exceptOnForms(),
+            Text::make('Cancelled orders count' , 'cancelled_orders_count')->onlyOnDetail(),
             Password::make('Password')
                 ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')
