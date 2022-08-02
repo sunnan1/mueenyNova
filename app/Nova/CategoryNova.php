@@ -58,8 +58,14 @@ class CategoryNova extends Resource
                     return ['image' => $request->image->store('/uploads/categories', 'public')];
                 })
                 ->disableDownload(),
-            Text::make('Name EN' , 'name_en'),
-            Text::make('Name AR' , 'name_ar'),
+            Text::make('Name EN' , 'name_en')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:category_novas,name_en')
+                ->updateRules('unique:category_novas,name_en,{{resourceId}}'),
+            Text::make('Name AR' , 'name_ar')
+                ->rules('required', 'min:1')
+                ->creationRules('unique:category_novas,name_ar')
+                ->updateRules('unique:category_novas,name_ar,{{resourceId}}'),
             Select::make('Active' , 'active')
                 ->options([
                     1 => 'Active',
@@ -83,7 +89,8 @@ class CategoryNova extends Resource
                 ->trueValue(1)
                 ->falseValue(0)->exceptOnForms(),
 
-            Number::make('Position' , 'position'),
+            Number::make('Position' , 'position')
+                ->rules('required'),
             BelongsTo::make('Category' , 'category' , CategoryNova::class)->nullable(),
         ];
     }
