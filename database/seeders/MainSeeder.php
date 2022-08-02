@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\CancellationReason;
+use App\Models\CancellationReasonNova;
 use App\Models\Category;
 use App\Models\CategoryNova;
 use App\Models\LanguageNova;
@@ -25,6 +27,7 @@ class MainSeeder extends Seeder
         //$this->languages();
         //$this->categories();
         //$this->locations();
+        $this->cancellationReason();
     }
 
     public function supportReason()
@@ -42,6 +45,37 @@ class MainSeeder extends Seeder
                 $support->{$key} = $val;
             }
             $support->save();
+        }
+    }
+
+    public function cancellationReason()
+    {
+        $category = CancellationReason::with('translations')->get();
+        foreach ($category as $cat)
+        {
+            $catNova = new CancellationReasonNova();
+            $nameEn = '';
+            $nameAr = '';
+            foreach($cat->translations as $trans)
+            {
+                if ($trans->locale === 'en')
+                {
+                    $nameEn = $trans->name;
+                }
+                if ($trans->locale === 'ar')
+                {
+                    $nameAr = $trans->name;
+                }
+            }
+            if ($nameEn != '')
+            {
+                $catNova->name_en = $nameEn;
+                $catNova->name_ar = $nameAr;
+                $catNova->active = $cat->active;
+                $catNova->type = $cat->type;
+                $catNova->position = $cat->position;
+                $catNova->save();
+            }
         }
     }
 
