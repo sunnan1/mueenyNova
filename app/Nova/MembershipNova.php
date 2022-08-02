@@ -82,7 +82,7 @@ class MembershipNova extends Resource
                 'admins' => 'Admins',
                 'stores' => 'Stores'
             ])->rules('required'),
-            Text::make('Commission percentage' , 'commission_percentage')->rules('required'),
+            Currency::make('Commission percentage' , 'commission_percentage')->rules('required'),
         ];
     }
 

@@ -70,7 +70,7 @@ class AdvertisementBanner extends Resource
                 ->trueValue(1)
                 ->falseValue(0),
             Number::make('Sort Order' , 'sort_order')->rules('required'),
-            BelongsTo::make('Mother Category' , 'categorynova' , CategoryNova::class)->rules('nullable')
+            BelongsTo::make('Mother Category' , 'categorynova' , CategoryNova::class)->nullable()
         ];
     }
 

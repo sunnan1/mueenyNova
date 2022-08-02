@@ -61,7 +61,7 @@ class PaymentMethodNova extends Resource
             Select::make('Status' , 'status')->options([
                 0 => 'Active',
                 1 => 'Not Active'
-            ])->onlyOnForms(),
+            ])->onlyOnForms()->rules('required', 'min:1'),
             Text::make('Status' , 'status')->displayUsing(function (){
                if ($this->status == 0){
                     return 'Active';
