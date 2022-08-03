@@ -68,13 +68,6 @@ class Advertisement extends Resource
                 return $this->type == 1 ? 'In Location' : ($this->type == 2 ? 'Remotely' : "");
             })->exceptOnForms(),
             Text::make('Description' , 'description')->onlyOnDetail(),
-            Select::make('Status' , 'status')->options([
-                0 => 'Waiting for acceptance',
-                1 => 'Active',
-                2 => 'Completed',
-                3 => 'Cancelled',
-                4 => 'Refunded',
-            ])->onlyOnForms(),
             Text::make('Type' , 'type')->displayUsing(function (){
                 return $this->type == 1 ? 'In Location' : ($this->type == 2 ? 'Remotely' : '');
             })->exceptOnForms(),
