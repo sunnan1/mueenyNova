@@ -22,10 +22,10 @@ class MainSeeder extends Seeder
      */
     public function run()
     {
-        $this->supportReason();
-        $this->welcomeScreens();
-        $this->languages();
-        $this->categories();
+        // $this->supportReason();
+        // $this->welcomeScreens();
+        // $this->languages();
+        // $this->categories();
         $this->locations();
         $this->cancellationReason();
     }
@@ -122,7 +122,7 @@ class MainSeeder extends Seeder
                 $catNova->image = $cat->image;
                 $catNova->level = $cat->level;
                 $catNova->position = $cat->position;
-                $catNova->dial_code = $cat->dial_code;
+                $catNova->dial_code = $cat->dial_code ?? "+";
                 $catNova->save();
             }
         }
