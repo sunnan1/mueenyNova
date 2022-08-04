@@ -16,6 +16,9 @@ class AlterTableAdminsRemoveGroupIdIndex extends Migration
         Schema::table('admins' , function (Blueprint $table){
             $table->dropForeign('admins_group_id_foreign');
         });
+        Schema::table('advertisement_cancellation' , function (Blueprint $table){
+            $table->dropForeign('advertisement_cancellation_cancellation_reason_id_foreign');
+        });
     }
 
     /**
