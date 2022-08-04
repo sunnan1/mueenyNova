@@ -2,6 +2,7 @@
 
 namespace App\Nova\Actions;
 
+use App\Http\Traits\FirebaseNotification;
 use App\Models\Advertisement;
 use App\Models\AdvertisementCancellation;
 use App\Models\CancellationReasonNova;
@@ -19,7 +20,7 @@ use Laravel\Nova\Fields\Text;
 
 class AdvertisementStatusAction extends Action
 {
-    use InteractsWithQueue, Queueable;
+    use InteractsWithQueue, Queueable,FirebaseNotification;
 
     /**
      * Perform the action on the given models.
@@ -42,22 +43,26 @@ class AdvertisementStatusAction extends Action
             $advertisementCancellation->save();
 
 
-//            $title = 'Admin Notification';
-//            $message = 'Order # ' . $models->id . ' has been cancelled by the admin';
-//            $ad->offers()->each(function ($item, $key) use ($title, $message) {
-//
-//                if ($item->status == 1) {
-//                    $item->status = 0;
-//                    $item->save();
-//                    $this->sendNotification($item->userAsServiceProvider->id, $title, $message);
-//                }
-//            });
-//
-//
-//            $this->sendNotification($ad->user->id, $title, $message);
+            $ad = Advertisement::find((int)$models[0]->id);
+            Advertisement::find((int)$models[0]->id)->update(['status' => $fields->status]);
+
+            $title = 'Admin Notification';
+            $message = 'Order # ' . $models[0]->id . ' has been cancelled by the admin';
+            $ad->offers()->each(function ($item, $key) use ($title, $message) {
+
+                if ($item->status == 1) {
+                    $item->status = 0;
+                    $item->save();
+                    $this->sendNotification($item->userAsServiceProvider->id, $title, $message);
+                }
+            });
+
+            $this->sendNotification($ad->user->id, $title, $message);
             DB::commit();
         }
-        $ad = Advertisement::find((int)$models[0]->id)->update(['status' => $fields->status]);
+        else {
+            Advertisement::find((int)$models[0]->id)->update(['status' => $fields->status]);
+        }
     }
 
     /**

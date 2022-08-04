@@ -32,8 +32,6 @@ trait FirebaseNotification
     {
         $user = User::find($userID);
 
-
-
         $notifications = Notification::where('notifiable_id', $user->id)->whereNull('read_at')->count();
 
 
@@ -50,7 +48,6 @@ trait FirebaseNotification
             $token = $device->device_token;
 
 
-
             if ($token != null) {
                 $fcm = new Fcm();
                 $fcm->setTitle($title);
@@ -59,6 +56,7 @@ trait FirebaseNotification
                 $json = $fcm->getPush($notifications);
                 $fcm->send($token, $json);
             }
+
         } else {
             Log::error('No user ' . $userID);
             return;
