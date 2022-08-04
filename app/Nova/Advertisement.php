@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\AdvertisementStatusAction;
 use App\Nova\Filters\AdvertisementFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -171,6 +172,8 @@ class Advertisement extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            new AdvertisementStatusAction()
+        ];
     }
 }

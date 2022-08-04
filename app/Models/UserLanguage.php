@@ -3,9 +3,9 @@
 namespace App\Models;
 
 class UserLanguage extends MyModel {
- 
+
     protected $table = "user_language";
-    
+
     protected $casts = [
         'id' => 'integer',
         'language_id' => 'integer',
@@ -28,12 +28,27 @@ class UserLanguage extends MyModel {
         parent::boot();
 
         static::deleting(function(UserLanguage $userLanguage) {
-          
+
         });
-        
+
         static::deleted(function (UserLanguage $userLanguage) {
-           
+
         });
+    }
+
+    public function language()
+    {
+        return $this->belongsTo(LanguageNova::class , 'language_id' , 'id');
+    }
+
+    public function efficiencylevel()
+    {
+        return $this->belongsTo(EfficiencyLevelNova::class , 'efficiency_level_id' , 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class , 'user_id' , 'id');
     }
 
 }

@@ -2,17 +2,25 @@
 
 namespace App\Nova\Actions;
 
+use App\Http\Traits\FirebaseNotification;
+use App\Models\Advertisement;
+use App\Models\AdvertisementCancellation;
+use App\Models\CancellationReasonNova;
+use Epartment\NovaDependencyContainer\NovaDependencyContainer;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 
 class AdvertisementStatusAction extends Action
 {
-    use InteractsWithQueue, Queueable;
+    use InteractsWithQueue, Queueable,FirebaseNotification;
 
     /**
      * Perform the action on the given models.
@@ -23,7 +31,38 @@ class AdvertisementStatusAction extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        //
+        DB::beginTransaction();
+        if (3 === (int)$fields->status) {
+            $advertisementCancellation = new AdvertisementCancellation();
+            $advertisementCancellation->cancellation_reason_id = $fields->reason;
+            $advertisementCancellation->cancellation_note = $fields->note;
+            $advertisementCancellation->status = 1;
+            $advertisementCancellation->created_at = date('y-m-d h:i:s');
+            $advertisementCancellation->advertisement_id = (int) $models[0]->id;
+            $advertisementCancellation->by = (int) Auth::id();
+            $advertisementCancellation->save();
+
+
+            $ad = Advertisement::find((int)$models[0]->id);
+            Advertisement::find((int)$models[0]->id)->update(['status' => $fields->status]);
+
+            $title = 'Admin Notification';
+            $message = 'Order # ' . $models[0]->id . ' has been cancelled by the admin';
+            $ad->offers()->each(function ($item, $key) use ($title, $message) {
+
+                if ($item->status == 1) {
+                    $item->status = 0;
+                    $item->save();
+                    $this->sendNotification($item->userAsServiceProvider->id, $title, $message);
+                }
+            });
+
+            $this->sendNotification($ad->user->id, $title, $message);
+            DB::commit();
+        }
+        else {
+            Advertisement::find((int)$models[0]->id)->update(['status' => $fields->status]);
+        }
     }
 
     /**
@@ -33,6 +72,7 @@ class AdvertisementStatusAction extends Action
      */
     public function fields()
     {
+        $reasons = CancellationReasonNova::pluck('name_ar' , 'id')->toArray();
         return [
             Select::make('Status' , 'status')->options([
                 0 => 'Waiting for acceptance',
@@ -41,11 +81,16 @@ class AdvertisementStatusAction extends Action
                 3 => 'Cancelled',
                 4 => 'Refunded',
             ])->rules('required'),
+
+            NovaDependencyContainer::make([
+                Select::make('Reason' , 'reason')->options($reasons)->rules('required'),
+                Text::make('Note' , 'note')->rules('required'),
+            ])->dependsOn('status', 3),
         ];
     }
 
     public function name()
     {
-        return "Status";
+        return "Change Status";
     }
 }

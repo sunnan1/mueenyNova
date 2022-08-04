@@ -10,7 +10,7 @@ class Advertisement extends MyModel
 {
 
     protected $table = "advertisements";
-
+    protected $guarded = [];
     protected $casts = [
         'id' => 'integer',
         'budget' => 'double',

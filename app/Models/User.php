@@ -237,4 +237,10 @@ class User extends Authenticatable implements UserInterface
     {
         return $this->hasOne(StoreManager::class);
     }
+
+    public function userLanguage()
+    {
+        return $this->hasMany(UserLanguage::class, 'user_id' , 'id');
+    }
+
 }

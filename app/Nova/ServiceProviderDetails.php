@@ -158,6 +158,12 @@ class ServiceProviderDetails extends Resource
                 ->trueValue(1)
                 ->falseValue(0),
             HasMany::make('Documents' , 'documents' , ServiceProviderDetailDocuments::class),
+            HasMany::make('Rate & reviews' , 'rateServiceProvider' , Rate::class),
+            HasMany::make('Languages' , 'userLanguages' , UserLanguage::class),
+            HasMany::make('Certifications' , 'certifications' , Certification::class),
+            HasMany::make('Practical Experiences' , 'practicalExperience' , PracticalExperience::class),
+            HasMany::make('Transportations' , 'transportation' , TransportationNova::class),
+            HasMany::make('List of Service Details' , 'listServices' , ListService::class),
         ];
 
         return $columns;

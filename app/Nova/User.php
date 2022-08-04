@@ -139,6 +139,12 @@ class User extends Resource
             HasMany::make('Bank Accounts' , 'bankAccounts' , BankAccount::class),
             HasMany::make('Locations' , 'address' , Address::class),
             HasMany::make('Certifications' , 'certifications' , Certification::class),
+            HasMany::make('Service Provider Rater' , 'serviceProviderRate' , Rate::class),
+            HasMany::make('Service Provider Rated' , 'rateServiceProvider' , Rate::class),
+            HasMany::make('Languages' , 'userLanguage' , UserLanguage::class),
+            HasMany::make('Practical Experiences' , 'practicalExperience' , PracticalExperience::class),
+            HasMany::make('Transportations' , 'transportationNova' , TransportationNova::class),
+            HasMany::make('List Services' , 'listServices' , ListService::class),
         ];
     }
 

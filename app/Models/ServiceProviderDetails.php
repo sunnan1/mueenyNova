@@ -121,8 +121,36 @@ class ServiceProviderDetails extends MyModel
 
         if (array_key_exists($this->nationality, $search_array)) {
             return $search_array[$this->nationality]['name'];
-            return "The 'first' element is in the array";
         }
     }
 
+    public function userLanguages()
+    {
+        return $this->user->userLanguage();
+    }
+
+    public function rateServiceProvider()
+    {
+        return $this->user->rateServiceProvider();
+    }
+
+    public function certifications()
+    {
+        return $this->user->certifications();
+    }
+
+    public function practicalExperience()
+    {
+        return $this->user->practicalExperience();
+    }
+
+    public function transportation()
+    {
+        return $this->user->transportationNova();
+    }
+
+    public function listServices()
+    {
+        return $this->user->listServices();
+    }
 }
