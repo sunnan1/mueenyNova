@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
@@ -91,7 +92,8 @@ class CategoryNova extends Resource
 
             Number::make('Position' , 'position')
                 ->rules('required'),
-            BelongsTo::make('Category' , 'category' , CategoryNova::class)->nullable(),
+            BelongsTo::make('Category', 'category', CategoryNova::class),
+            HasMany::make('Children', 'children', CategoryNova::class),
         ];
     }
 
