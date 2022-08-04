@@ -3,40 +3,38 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Currency;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Certification extends Resource
+class Rate extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Certification::class;
+    public static $model = \App\Models\Rate::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'id';
 
+    public static $displayInNavigation = false;
     /**
      * The columns that should be searched.
      *
      * @var array
      */
     public static $search = [
-        'name',
+        'type','comment'
     ];
 
     /**
@@ -49,20 +47,19 @@ class Certification extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Avatar::make('Image', 'image')
-                ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
-                ->store(function (Request $request, \App\Models\Certification $model) {
-                    if ($model->image) {
-                        Storage::disk('public')->delete($model->image);
-                    }
-                    return ['image' => $request->image->store('/uploads/certifications', 'public')];
-                })
-                ->disableDownload(),
-            Text::make('Name' , 'name'),
-            Text::make('Description' , 'description'),
-            Text::make('Earning Yearr' , 'earning_year'),
-            BelongsTo::make('User' , 'user' , User::class),
+            Text::make('Type')->displayUsing(function() {
+                return $this->type == 1 ? 'Client' : 'Service Provider';
+            })->exceptOnForms(),
+            Currency::make('Score' , 'score'),
+            Text::make('Comment' , 'comment'),
+            Select::make('Status' , 'status')
+                ->options([
+                    1 => 'Client',
+                    2 => 'Service Provider',
+                ])->onlyOnForms()
+                ->rules('required'),
+            BelongsTo::make('Rater' , 'rater' , User::class),
+            BelongsTo::make('Rated' , 'rated' , User::class),
         ];
     }
 

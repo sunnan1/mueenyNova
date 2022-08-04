@@ -14,29 +14,30 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Certification extends Resource
+class ListService extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Certification::class;
+    public static $model = \App\Models\ListService::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
      */
-    public static $title = 'name';
+    public static $title = 'description';
 
+    public static $displayInNavigation = false;
     /**
      * The columns that should be searched.
      *
      * @var array
      */
     public static $search = [
-        'name',
+        'description',
     ];
 
     /**
@@ -49,20 +50,17 @@ class Certification extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Avatar::make('Image', 'image')
-                ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
-                ->store(function (Request $request, \App\Models\Certification $model) {
-                    if ($model->image) {
-                        Storage::disk('public')->delete($model->image);
-                    }
-                    return ['image' => $request->image->store('/uploads/certifications', 'public')];
-                })
-                ->disableDownload(),
-            Text::make('Name' , 'name'),
-            Text::make('Description' , 'description'),
-            Text::make('Earning Yearr' , 'earning_year'),
-            BelongsTo::make('User' , 'user' , User::class),
+            Text::make('Description' , 'description')->rules('required'),
+            BelongsTo::make('Main Category' , 'mainCategoryNova' , CategoryNova::class)->rules('required'),
+            BelongsTo::make('Sub Category' , 'subCategoryNova' , CategoryNova::class)->rules('required'),
+            BelongsTo::make('Efficiency Level' , 'efficiencyLevelNova' , EfficiencyLevelNova::class)->rules('required'),
+            Boolean::make('Remotely' , 'is_remotely')
+                ->trueValue(1)
+                ->falseValue(0)->rules('required'),
+            Boolean::make('Has Availability Times' , 'has_availability_times')
+                ->trueValue(1)
+                ->falseValue(0)->rules('required'),
+            BelongsTo::make('User' , 'user' , User::class)->rules('required')
         ];
     }
 

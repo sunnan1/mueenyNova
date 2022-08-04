@@ -3,9 +3,9 @@
 namespace App\Models;
 
 class PracticalExperience extends MyModel {
- 
+
     protected $table = "practical_experiences";
-    
+
     protected $casts = [
         'id' => 'integer',
         'efficiency_level_id' => 'integer'
@@ -13,6 +13,10 @@ class PracticalExperience extends MyModel {
 
     public function efficient() {
         return $this->belongsTo(EfficiencyLevel::class, 'efficiency_level_id');
+    }
+
+    public function efficiencylevel() {
+        return $this->belongsTo(EfficiencyLevelNova::class, 'efficiency_level_id');
     }
 
     public function translations() {
@@ -29,17 +33,17 @@ class PracticalExperience extends MyModel {
         $transformer->efficiency_level = $this->efficiency_level;
         return $transformer;
     }
-    
+
 
     protected static function boot() {
         parent::boot();
 
         static::deleting(function(PracticalExperience $practicalExperience) {
-          
+
         });
-        
+
         static::deleted(function (PracticalExperience $practicalExperience) {
-           
+
         });
     }
 
