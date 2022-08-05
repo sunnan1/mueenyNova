@@ -63,7 +63,7 @@ class ServiceProviderDetails extends Resource
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads', 'public')];
+                    return ['image' => $request->image->store('/uploads/service_providers', 'public')];
                 })
                 ->exceptOnForms()
                 ->disableDownload(),
@@ -74,7 +74,7 @@ class ServiceProviderDetails extends Resource
                     if ($model->id_image) {
                         Storage::disk('public')->delete($model->id_image);
                     }
-                    return ['image' => $request->id_image->store('/uploads', 'public')];
+                    return ['image' => $request->id_image->store('/uploads/service_providers', 'public')];
                 })
                 ->exceptOnForms()
                 ->disableDownload(),
