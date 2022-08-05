@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\ServiceProviderStatusAction;
 use App\Nova\Filters\ServiceProviderDetailFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -79,12 +80,6 @@ class ServiceProviderDetails extends Resource
                 ->exceptOnForms()
                 ->disableDownload(),
 
-
-            Select::make('Status' , 'status')->options([
-                0 => 'Pending',
-                1 => 'Accepted',
-                2 => 'Rejected'
-            ])->onlyOnForms(),
             Text::make('Status' , 'status')->displayUsing(function (){
                 if ($this->status == 0)
                 {
@@ -166,7 +161,7 @@ class ServiceProviderDetails extends Resource
             HasMany::make('List of Service Details' , 'listServices' , ListService::class),
         ];
 
-        return $columns;
+       return $columns;
     }
 
     /**
@@ -212,7 +207,9 @@ class ServiceProviderDetails extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            new ServiceProviderStatusAction()
+        ];
     }
 
     public static function label()

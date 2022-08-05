@@ -28,7 +28,7 @@ class ServiceProviderDetailFilter extends Filter
             return $query->latest()->where('is_submitted', 1)->pending();
         }
         if ($value === 'agency') {
-            return $query->rejected();
+            return $query->latest()->pending()->whereNotIn('nationality', ['SA'])->where('is_submitted', 0);
         }
 
         return $query;
