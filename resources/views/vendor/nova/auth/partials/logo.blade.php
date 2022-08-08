@@ -1,0 +1,1 @@
+<img style="width:60%" src="http://localhost/public/backend/media/logos/logo-letter-13.png" class="max-h-75px" alt="">

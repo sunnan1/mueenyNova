@@ -24,7 +24,7 @@ class Admin extends Resource
 
     public static $with = ['roles', 'permissions'];
 
-    public static $group = 'General';
+    public static $group = 'Admin';
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
@@ -51,9 +51,8 @@ class Admin extends Resource
     {
         $codes = config('country.countries');
         $codeOptions = [];
-        foreach($codes as $code)
-        {
-            $codeOptions[$code['code']] = $code['code'] . ' | '.$code['name'];
+        foreach ($codes as $code) {
+            $codeOptions[$code['code']] = $code['code'] . ' | ' . $code['name'];
         }
         return [
             ID::make()->sortable(),
@@ -95,9 +94,9 @@ class Admin extends Resource
                 ->onlyOnForms()
                 ->rules('required'),
 
-            Boolean::make('Active' , "active")
-                    ->trueValue(1)
-                    ->falseValue(0),
+            Boolean::make('Active', "active")
+                ->trueValue(1)
+                ->falseValue(0),
 
             Password::make('Password')
                 ->onlyOnForms()

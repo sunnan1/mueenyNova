@@ -21,12 +21,14 @@ class Authenticate extends BaseAuthenticationMiddleware
      */
     public function handle($request, Closure $next, ...$guards)
     {
+
         try {
             $guard = config('nova.guard');
 
-            if (! empty($guard)) {
+            if (!empty($guard)) {
                 $guards[] = $guard;
             }
+
 
             return parent::handle($request, $next, ...$guards);
         } catch (AuthenticationException $e) {

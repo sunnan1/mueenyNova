@@ -41,6 +41,7 @@ class Advertisement extends Resource
         'title', 'description'
     ];
 
+    public static $group = 'Advertisment';
     /**
      * Get the fields displayed by the resource.
      *
@@ -52,81 +53,74 @@ class Advertisement extends Resource
         $columns =  [
             ID::make(__('ID'), 'id')->sortable(),
             Image::make('Profile Photo')->disk('public')->exceptOnForms(),
-            Text::make('Full Name')->displayUsing(function (){
+            Text::make('Full Name')->displayUsing(function () {
                 return $this->user->name;
             })->exceptOnForms(),
-            Text::make('Email')->displayUsing(function (){
+            Text::make('Email')->displayUsing(function () {
                 return $this->user->email;
             })->exceptOnForms(),
-            Date::make('Date' , 'date'),
-            Date::make('Updated At' , 'updated_at')->exceptOnForms(),
-            Text::make('Title' , 'title')->exceptOnForms(),
-            Text::make('Offers')->displayUsing(function(){
-               return $this->offers->count();
+            Date::make('Date', 'date'),
+            Date::make('Updated At', 'updated_at')->exceptOnForms(),
+            Text::make('Title', 'title')->exceptOnForms(),
+            Text::make('Offers')->displayUsing(function () {
+                return $this->offers->count();
             })->exceptOnForms(),
-            Text::make('Budget' , 'budget'),
+            Text::make('Budget', 'budget'),
             Text::make('Type')->displayUsing(function () {
                 return $this->type == 1 ? 'In Location' : ($this->type == 2 ? 'Remotely' : "");
             })->exceptOnForms(),
-            Text::make('Description' , 'description')->onlyOnDetail(),
-            Text::make('Type' , 'type')->displayUsing(function (){
+            Text::make('Description', 'description')->onlyOnDetail(),
+            Text::make('Type', 'type')->displayUsing(function () {
                 return $this->type == 1 ? 'In Location' : ($this->type == 2 ? 'Remotely' : '');
             })->exceptOnForms(),
-            Text::make('Commission' , 'commission')->exceptOnForms(),
-            Text::make('Payment Status' , 'payment_status')->displayUsing(function (){
+            Text::make('Commission', 'commission')->exceptOnForms(),
+            Text::make('Payment Status', 'payment_status')->displayUsing(function () {
                 return $this->type == 0 ? 'Pending' : ($this->type == 1 ? 'Paid' : '');
             })->onlyOnDetail(),
-            BelongsTo::make('User' , 'user' , User::class)->exceptOnForms(),
-            BelongsTo::make('Payment Method' , 'paymentMethodNova' , PaymentMethodNova::class)->exceptOnForms(),
-            BelongsTo::make('Service Provider' , 'serviceProvider' , ServiceProviderDetails::class)->exceptOnForms(),
-            BelongsTo::make('Main Category' , 'categoryNova' , CategoryNova::class)->exceptOnForms(),
-            BelongsTo::make('Sub Category' , 'subCategoryNova' , CategoryNova::class)->exceptOnForms(),
-            HasMany::make('Offers', 'offers' , Offer::class),
-            HasMany::make('Requirements', 'requirements' , Requirement::class),
-            HasMany::make('Reports', 'reports' , OrderReport::class),
-            Text::make('Locations')->displayUsing(function() {
-               $address = [];
-               foreach($this->user->address as $add)
-               {
-                   $address[] = $add->description;
-               }
-               return implode(', ', $address);
+            BelongsTo::make('User', 'user', User::class)->exceptOnForms(),
+            BelongsTo::make('Payment Method', 'paymentMethodNova', PaymentMethodNova::class)->exceptOnForms(),
+            BelongsTo::make('Service Provider', 'serviceProvider', ServiceProviderDetails::class)->exceptOnForms(),
+            BelongsTo::make('Main Category', 'categoryNova', CategoryNova::class)->exceptOnForms(),
+            BelongsTo::make('Sub Category', 'subCategoryNova', CategoryNova::class)->exceptOnForms(),
+            HasMany::make('Offers', 'offers', Offer::class),
+            HasMany::make('Requirements', 'requirements', Requirement::class),
+            HasMany::make('Reports', 'reports', OrderReport::class),
+            Text::make('Locations')->displayUsing(function () {
+                $address = [];
+                foreach ($this->user->address as $add) {
+                    $address[] = $add->description;
+                }
+                return implode(', ', $address);
             })->onlyOnDetail(),
-            Text::make('Status' , 'status')->displayUsing(function (){
-                if ($this->status == 0)
-                {
+            Text::make('Status', 'status')->displayUsing(function () {
+                if ($this->status == 0) {
                     return 'Waiting for acceptance';
                 }
-                if ($this->status == 1)
-                {
+                if ($this->status == 1) {
                     return 'Active';
                 }
-                if ($this->status == 2)
-                {
+                if ($this->status == 2) {
                     return 'Completed';
                 }
-                if ($this->status == 3)
-                {
+                if ($this->status == 3) {
                     return 'Cancelled';
                 }
-                if ($this->status == 4)
-                {
+                if ($this->status == 4) {
                     return 'Refunded';
                 }
             })->exceptOnForms(),
-            Text::make('Invoice Number' , 'invoice_number')->exceptOnForms(),
-            Text::make('RRN' , 'rrn')->exceptOnForms(),
+            Text::make('Invoice Number', 'invoice_number')->exceptOnForms(),
+            Text::make('RRN', 'rrn')->exceptOnForms(),
+        ];
+        $additional = [];
+        if ($this->status === 2) {
+            $additional = [
+                Text::make('Invoices')->displayUsing(function () {
+                    return '<a target="_blank" href="' . env('APP_URL') . '/orders_management/pdf/' . $this->id . '/C">Client Invoice</a> &nbsp;&nbsp;&nbsp; <a target="_blank" href="' . env('APP_URL') . '/orders_management/pdf/' . $this->id . '/S">SP Invoice</a>';
+                })->asHtml(),
             ];
-            $additional = [];
-            if ($this->status === 2)
-            {
-                $additional = [
-                    Text::make('Invoices')->displayUsing(function(){
-                        return '<a target="_blank" href="' . env('APP_URL') . '/orders_management/pdf/' . $this->id . '/C">Client Invoice</a> &nbsp;&nbsp;&nbsp; <a target="_blank" href="' . env('APP_URL') . '/orders_management/pdf/' . $this->id . '/S">SP Invoice</a>';
-                    })->asHtml(),
-                ];
-            }
-            return array_merge($columns , $additional);
+        }
+        return array_merge($columns, $additional);
     }
 
     /**

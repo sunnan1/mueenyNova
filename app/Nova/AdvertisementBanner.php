@@ -40,6 +40,7 @@ class AdvertisementBanner extends Resource
         'id', 'name'
     ];
 
+    public static $group = 'Advertisment';
     /**
      * Get the fields displayed by the resource.
      *
@@ -62,17 +63,17 @@ class AdvertisementBanner extends Resource
                     return end($extension);
                 })
                 ->disableDownload(),
-            Text::make('Name' , 'name')
+            Text::make('Name', 'name')
                 ->rules('required')
                 ->creationRules('unique:advertisement_banners,name')
                 ->updateRules('unique:advertisement_banners,name,{{resourceId}}'),
-            Text::make('Link' , 'link')
+            Text::make('Link', 'link')
                 ->rules('required', 'min:1'),
-            Boolean::make('Active' , "active")
+            Boolean::make('Active', "active")
                 ->trueValue(1)
                 ->falseValue(0),
-            Number::make('Sort Order' , 'sort_order')->rules('required'),
-            BelongsTo::make('Mother Category' , 'categorynova' , CategoryNova::class)->nullable()
+            Number::make('Sort Order', 'sort_order')->rules('required'),
+            BelongsTo::make('Mother Category', 'categorynova', CategoryNova::class)->nullable()
         ];
     }
 

@@ -38,6 +38,8 @@ class SupportTicketNova extends Resource
         'name',
         'message',
     ];
+    public static $group = 'General';
+
 
     /**
      * Get the fields displayed by the resource.
@@ -49,27 +51,27 @@ class SupportTicketNova extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Name' , 'name')->rules('required'),
-            Text::make('Message' , 'message')->rules('required'),
-            Text::make('Status')->displayUsing(function (){
-                if ($this->status == 0){
+            Text::make('Name', 'name')->rules('required'),
+            Text::make('Message', 'message')->rules('required'),
+            Text::make('Status')->displayUsing(function () {
+                if ($this->status == 0) {
                     return 'Open';
-                }elseif ($this->status == 1){
+                } elseif ($this->status == 1) {
                     return 'Pending';
-                }elseif ($this->status == 2){
+                } elseif ($this->status == 2) {
                     return 'Closed';
                 }
             })->exceptOnForms()
                 ->rules('required'),
-            Select::make('Status' , 'status')->options([
+            Select::make('Status', 'status')->options([
                 0 => 'Open',
                 1 => 'Pending',
                 2 => 'Closed'
             ])->onlyOnForms()
                 ->rules('required'),
-            BelongsTo::make('Support Reason' , 'reason' , SupportReasonNova::class)
+            BelongsTo::make('Support Reason', 'reason', SupportReasonNova::class)
                 ->rules('required'),
-            BelongsTo::make('User' , 'user' , User::class)
+            BelongsTo::make('User', 'user', User::class)
                 ->rules('required'),
         ];
     }
