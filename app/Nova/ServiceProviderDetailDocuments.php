@@ -53,12 +53,14 @@ class ServiceProviderDetailDocuments extends Resource
             })->asHtml(),
             Avatar::make('Document', 'document')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+                ->resolveUsing(fn ($v) => '/uploads/service_providers/'.$v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\ServiceProviderDetailDocuments $model) {
                     if ($model->document) {
                         Storage::disk('public')->delete($model->document);
                     }
-                    return ['document' => $request->document->store('/uploads/service_providers', 'public')];
+                    $image = ['document' => $request->document->store('/uploads/service_providers', 'public')];
+                    $extension = explode('/', $image['document']);
+                    return end($extension);
                 }),
             BelongsTo::make('Service Provider' , 'provider' , ServiceProviderDetails::class),
         ];

@@ -54,22 +54,26 @@ class StoreManagerDetailNova extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Cover Image', 'cover_image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+                ->resolveUsing(fn ($v) => '/uploads/admins/'.$v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\StoreManagerDetailNova $model) {
                     if ($model->cover_image) {
                         Storage::disk('public')->delete($model->cover_image);
                     }
-                    return ['cover_image' => $request->cover_image->store('/uploads/admins', 'public')];
+                    $image = ['cover_image' => $request->cover_image->store('/uploads/admins', 'public')];
+                    $extension = explode('/', $image['cover_image']);
+                    return end($extension);
                 })
                 ->disableDownload(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+                ->resolveUsing(fn ($v) => '/uploads/admins/'.$v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\StoreManagerDetailNova $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads/admins', 'public')];
+                    $image = ['image' => $request->image->store('/uploads/admins', 'public')];
+                    $extension = explode('/', $image['image']);
+                    return end($extension);
                 })
                 ->disableDownload(),
             Text::make('Store Name' , 'name')->rules('required'),

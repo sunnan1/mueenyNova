@@ -61,12 +61,14 @@ class User extends Resource
 
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+                ->resolveUsing(fn ($v) => '/uploads/users/'.$v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\User $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads/users', 'public')];
+                    $image = ['image' => $request->image->store('/uploads/users', 'public')];
+                    $extension = explode('/', $image['image']);
+                    return end($extension);
                 })
                 ->disableDownload(),
 

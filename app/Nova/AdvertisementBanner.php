@@ -52,12 +52,14 @@ class AdvertisementBanner extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+                ->resolveUsing(fn ($v) => '/uploads/advertisement_banners/'.$v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\AdvertisementBanner $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads/advertisement_banners', 'public')];
+                    $image =  ['image' => $request->image->store('/uploads/advertisement_banners', 'public')];
+                    $extension = explode('/', $image['image']);
+                    return end($extension);
                 })
                 ->disableDownload(),
             Text::make('Name' , 'name')
