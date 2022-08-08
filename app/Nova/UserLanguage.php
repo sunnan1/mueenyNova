@@ -40,7 +40,7 @@ class UserLanguage extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             BelongsTo::make('Language' , 'language' , LanguageNova::class),
             BelongsTo::make('Efficiency Level' , 'efficiencylevel' , EfficiencyLevelNova::class),
-            BelongsTo::make('User' , 'user' , User::class),
+            BelongsTo::make('User' , 'user' , User::class)->exceptOnForms(),
         ];
     }
 

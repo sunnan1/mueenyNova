@@ -51,12 +51,14 @@ class Certification extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+                ->resolveUsing(fn ($v) => '/uploads/certifications/'.$v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\Certification $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads/certifications', 'public')];
+                    $image = ['image' => $request->image->store('/uploads/certifications', 'public')];
+                    $extension = explode('/', $image['image']);
+                    return end($extension);
                 })
                 ->disableDownload(),
             Text::make('Name' , 'name'),

@@ -3,9 +3,9 @@
 namespace App\Models;
 
 class UserTransportation extends MyModel {
- 
+
     protected $table = "user_transportation";
-    
+
     protected $casts = [
         'id' => 'integer',
         'transportation_id' => 'integer'
@@ -24,12 +24,16 @@ class UserTransportation extends MyModel {
         parent::boot();
 
         static::deleting(function(UserTransportation $userTransportation) {
-          
+
         });
-        
+
         static::deleted(function (UserTransportation $userTransportation) {
-           
+
         });
     }
 
+    public function transportation()
+    {
+        return $this->belongsTo(TransportationNova::class , 'transportation_id' , 'id');
+    }
 }

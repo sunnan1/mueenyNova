@@ -53,17 +53,20 @@ class CategoryNova extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
-                // ->disk('public')
-                ->disk('categories')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+
+                ->disk('public')
+                ->resolveUsing(fn ($v) => '/uploads/categories/'.$v ?: '../default.png')
+
                 ->store(function (Request $request, \App\Models\CategoryNova $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    // dd($request->image->store('/uploads/categories', 'public'));
+
+
                     $image = ['image' => $request->image->store('/uploads/categories', 'public')];
                     $extension = explode('/', $image['image']);
-                    return  end($extension);
+                    return end($extension);
+
                 })
                 ->disableDownload(),
             Text::make('Category EN', 'name_en')
@@ -99,8 +102,8 @@ class CategoryNova extends Resource
 
             Number::make('Position', 'position')
                 ->rules('required'),
-            BelongsTo::make('Parent Category', 'category', CategoryNova::class),
-            HasMany::make('Children', 'children', CategoryNova::class),
+            BelongsTo::make('Category', 'category', CategoryNova::class)->exceptOnForms(),
+            HasMany::make('Children', 'children', CategoryNova::class)->exceptOnForms(),
         ];
     }
 

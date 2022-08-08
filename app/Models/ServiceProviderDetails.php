@@ -129,6 +129,11 @@ class ServiceProviderDetails extends MyModel
         return $this->user->userLanguage();
     }
 
+    public function userTransportation()
+    {
+        return $this->user->userTransportation();
+    }
+
     public function rateServiceProvider()
     {
         return $this->user->rateServiceProvider();

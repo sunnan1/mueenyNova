@@ -61,12 +61,14 @@ class User extends Resource
 
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+                ->resolveUsing(fn ($v) => '/uploads/users/'.$v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\User $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads/users', 'public')];
+                    $image = ['image' => $request->image->store('/uploads/users', 'public')];
+                    $extension = explode('/', $image['image']);
+                    return end($extension);
                 })
                 ->disableDownload(),
 
@@ -143,7 +145,7 @@ class User extends Resource
             HasMany::make('Service Provider Rated' , 'rateServiceProvider' , Rate::class),
             HasMany::make('Languages' , 'userLanguage' , UserLanguage::class),
             HasMany::make('Practical Experiences' , 'practicalExperience' , PracticalExperience::class),
-            HasMany::make('Transportations' , 'transportationNova' , TransportationNova::class),
+            HasMany::make('Transportations' , 'userTransportation' , UserTransportation::class),
             HasMany::make('List Services' , 'listServices' , ListService::class),
         ];
     }

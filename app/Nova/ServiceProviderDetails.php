@@ -59,23 +59,27 @@ class ServiceProviderDetails extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+                ->resolveUsing(fn ($v) => '/uploads/service_providers/'.$v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\ServiceProviderDetails $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads/service_providers', 'public')];
+                    $image =  ['image' => $request->image->store('/uploads/service_providers', 'public')];
+                    $extension = explode('/', $image['image']);
+                    return end($extension);
                 })
                 ->exceptOnForms()
                 ->disableDownload(),
             Avatar::make('ID Image', 'id_image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+                ->resolveUsing(fn ($v) => '/uploads/service_providers/'.$v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\ServiceProviderDetails $model) {
                     if ($model->id_image) {
                         Storage::disk('public')->delete($model->id_image);
                     }
-                    return ['image' => $request->id_image->store('/uploads/service_providers', 'public')];
+                    $image =  ['image' => $request->id_image->store('/uploads/service_providers', 'public')];
+                    $extension = explode('/', $image['image']);
+                    return end($extension);
                 })
                 ->exceptOnForms()
                 ->disableDownload(),
@@ -110,24 +114,28 @@ class ServiceProviderDetails extends Resource
             ])->onlyOnForms(),
             Avatar::make('Commercial Record Image', 'commercial_record_image')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+                ->resolveUsing(fn ($v) => '/uploads/service_providers/'.$v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\ServiceProviderDetails $model) {
                     if ($model->commercial_record_image) {
                         Storage::disk('public')->delete($model->commercial_record_image);
                     }
-                    return ['commercial_record_image' => $request->commercial_record_image->store('/uploads/service_providers', 'public')];
+                    $image = ['commercial_record_image' => $request->commercial_record_image->store('/uploads/service_providers', 'public')];
+                    $extension = explode('/', $image['commercial_record_image']);
+                    return end($extension);
                 })
                 ->exceptOnForms()
                 ->disableDownload(),
 
             Avatar::make('ID Proof', 'id_proof')
                 ->disk('public')
-                ->resolveUsing(fn ($v) => $v ?: '../default.png')
+                ->resolveUsing(fn ($v) => '/uploads/service_providers/'.$v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\ServiceProviderDetails $model) {
                     if ($model->id_proof) {
                         Storage::disk('public')->delete($model->id_proof);
                     }
-                    return ['id_proof' => $request->id_proof->store('/uploads/service_providers', 'public')];
+                    $image = ['id_proof' => $request->id_proof->store('/uploads/service_providers', 'public')];
+                    $extension = explode('/', $image['id_proof']);
+                    return end($extension);
                 })
                 ->exceptOnForms()
                 ->disableDownload(),
@@ -157,7 +165,7 @@ class ServiceProviderDetails extends Resource
             HasMany::make('Languages' , 'userLanguages' , UserLanguage::class),
             HasMany::make('Certifications' , 'certifications' , Certification::class),
             HasMany::make('Practical Experiences' , 'practicalExperience' , PracticalExperience::class),
-            HasMany::make('Transportations' , 'transportation' , TransportationNova::class),
+            HasMany::make('Transportations' , 'userTransportation' , UserTransportation::class),
             HasMany::make('List of Service Details' , 'listServices' , ListService::class),
         ];
 
