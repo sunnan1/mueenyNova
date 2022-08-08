@@ -243,4 +243,9 @@ class User extends Authenticatable implements UserInterface
         return $this->hasMany(UserLanguage::class, 'user_id' , 'id');
     }
 
+    public function userTransportation()
+    {
+        return $this->hasMany(UserTransportation::class, 'user_id' , 'id');
+    }
+
 }

@@ -145,7 +145,7 @@ class User extends Resource
             HasMany::make('Service Provider Rated' , 'rateServiceProvider' , Rate::class),
             HasMany::make('Languages' , 'userLanguage' , UserLanguage::class),
             HasMany::make('Practical Experiences' , 'practicalExperience' , PracticalExperience::class),
-            HasMany::make('Transportations' , 'transportationNova' , TransportationNova::class),
+            HasMany::make('Transportations' , 'userTransportation' , UserTransportation::class),
             HasMany::make('List Services' , 'listServices' , ListService::class),
         ];
     }

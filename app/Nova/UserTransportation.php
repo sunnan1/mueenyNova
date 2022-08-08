@@ -11,14 +11,14 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class UserLanguage extends Resource
+class UserTransportation extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\UserLanguage::class;
+    public static $model = \App\Models\UserTransportation::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -38,9 +38,7 @@ class UserLanguage extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            BelongsTo::make('Language' , 'language' , LanguageNova::class),
-            BelongsTo::make('Efficiency Level' , 'efficiencylevel' , EfficiencyLevelNova::class),
-            BelongsTo::make('User' , 'user' , User::class)->exceptOnForms(),
+            BelongsTo::make('Transportation' , 'transportation' , TransportationNova::class),
         ];
     }
 
