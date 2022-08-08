@@ -34,8 +34,10 @@ class LocationNova extends Resource
      * @var array
      */
     public static $search = [
-        'name_en','name_ar'
+        'name_en', 'name_ar'
     ];
+
+    public static $group = 'General';
 
     /**
      * Get the fields displayed by the resource.
@@ -57,25 +59,25 @@ class LocationNova extends Resource
                     return ['image' => $request->image->store('/uploads/locations', 'public')];
                 })
                 ->disableDownload(),
-            Text::make('Name English' , 'name_en')
+            Text::make('Name English', 'name_en')
                 ->rules('required', 'min:1')
                 ->creationRules('unique:location_novas,name_en')
                 ->updateRules('unique:location_novas,name_en,{{resourceId}}'),
-            Text::make('Name Arabic' , 'name_ar')
+            Text::make('Name Arabic', 'name_ar')
                 ->rules('required', 'min:1')
                 ->creationRules('unique:location_novas,name_ar')
                 ->updateRules('unique:location_novas,name_ar,{{resourceId}}'),
-            Boolean::make('Active' , "active")
+            Boolean::make('Active', "active")
                 ->trueValue(1)
                 ->falseValue(0)
                 ->rules('required'),
-            Number::make('Level' , 'level')
+            Number::make('Level', 'level')
                 ->rules('required'),
-            Number::make('Position' , 'position')
+            Number::make('Position', 'position')
                 ->rules('required'),
-            Number::make('Dial Code' , 'dial_code')
+            Number::make('Dial Code', 'dial_code')
                 ->rules('required'),
-            BelongsTo::make('Location' , 'location' , LocationNova::class)->nullable(),
+            BelongsTo::make('Location', 'location', LocationNova::class)->nullable(),
         ];
     }
 

@@ -12,6 +12,7 @@ use App\Models\LocationNova;
 use App\Models\SupportReasonNova;
 use App\Models\WelcomeScreenNova;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class MainSeeder extends Seeder
 {
@@ -22,14 +23,24 @@ class MainSeeder extends Seeder
      */
     public function run()
     {
-        // $this->supportReason();
-        // $this->welcomeScreens();
-        // $this->languages();
-        // $this->categories();
+        $this->truncateAll();
+
+        $this->supportReason();
+        $this->welcomeScreens();
+        $this->languages();
+        $this->categories();
         $this->locations();
         $this->cancellationReason();
     }
 
+    public function truncateAll()
+    {
+        SupportReasonNova::truncate();
+        WelcomeScreenNova::truncate();
+        CategoryNova::truncate();
+        LocationNova::truncate();
+        CancellationReasonNova::truncate();
+    }
     public function supportReason()
     {
         foreach ([
@@ -91,7 +102,7 @@ class MainSeeder extends Seeder
                 $catNova->name_en = $nameEn;
                 $catNova->name_ar = $nameAr;
                 $catNova->active = $cat->active;
-                $catNova->image = $cat->image;
+                $catNova->image =  $cat->image;
                 $catNova->partner = $cat->partner;
                 $catNova->position = $cat->position;
                 $catNova->level = $cat->level;

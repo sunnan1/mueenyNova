@@ -34,8 +34,10 @@ class BankAccount extends Resource
      * @var array
      */
     public static $search = [
-        'bank_name', 'beneficiary_name' , 'account_number'
+        'bank_name', 'beneficiary_name', 'account_number'
     ];
+
+    public static $displayInNavigation = false;
 
     /**
      * Get the fields displayed by the resource.
@@ -47,16 +49,16 @@ class BankAccount extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make('Bank Name' , 'bank_name')
+            Text::make('Bank Name', 'bank_name')
                 ->rules('required', 'min:1'),
-            Text::make('Beneficiary Name' , 'beneficiary_name')
+            Text::make('Beneficiary Name', 'beneficiary_name')
                 ->rules('required', 'min:1'),
-            Text::make('IBAN' , 'iban')->rules('required', 'min:1'),
-            Text::make('Account Number' , 'account_number')
+            Text::make('IBAN', 'iban')->rules('required', 'min:1'),
+            Text::make('Account Number', 'account_number')
                 ->rules('required', 'min:1')
                 ->creationRules('unique:bank_accounts,account_number')
                 ->updateRules('unique:bank_accounts,account_number,{{resourceId}}'),
-            BelongsTo::make('User', 'user' , User::class)->rules('required'),
+            BelongsTo::make('User', 'user', User::class)->rules('required'),
         ];
     }
 

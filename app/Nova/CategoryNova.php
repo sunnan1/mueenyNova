@@ -36,8 +36,11 @@ class CategoryNova extends Resource
      * @var array
      */
     public static $search = [
-        'name_en','name_ar'
+        'name_en', 'name_ar'
     ];
+
+    public static $group = 'General';
+
 
     /**
      * Get the fields displayed by the resource.
@@ -50,24 +53,28 @@ class CategoryNova extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Avatar::make('Image', 'image')
-                ->disk('public')
+                // ->disk('public')
+                ->disk('categories')
                 ->resolveUsing(fn ($v) => $v ?: '../default.png')
                 ->store(function (Request $request, \App\Models\CategoryNova $model) {
                     if ($model->image) {
                         Storage::disk('public')->delete($model->image);
                     }
-                    return ['image' => $request->image->store('/uploads/categories', 'public')];
+                    // dd($request->image->store('/uploads/categories', 'public'));
+                    $image = ['image' => $request->image->store('/uploads/categories', 'public')];
+                    $extension = explode('/', $image['image']);
+                    return  end($extension);
                 })
                 ->disableDownload(),
-            Text::make('Name EN' , 'name_en')
+            Text::make('Category EN', 'name_en')
                 ->rules('required', 'min:1')
                 ->creationRules('unique:category_novas,name_en')
                 ->updateRules('unique:category_novas,name_en,{{resourceId}}'),
-            Text::make('Name AR' , 'name_ar')
+            Text::make('Category AR', 'name_ar')
                 ->rules('required', 'min:1')
                 ->creationRules('unique:category_novas,name_ar')
                 ->updateRules('unique:category_novas,name_ar,{{resourceId}}'),
-            Select::make('Active' , 'active')
+            Select::make('Active', 'active')
                 ->options([
                     1 => 'Active',
                     0 => 'Not Active',
@@ -75,24 +82,24 @@ class CategoryNova extends Resource
                 ->onlyOnForms()
                 ->rules('required'),
 
-            Boolean::make('Active' , "active")
+            Boolean::make('Active', "active")
                 ->trueValue(1)
                 ->falseValue(0)->exceptOnForms(),
 
-            Select::make('Partner' , 'partner')
-                ->options([
-                    1 => 'Yes',
-                    0 => 'No',
-                ])
-                ->onlyOnForms(),
+            // Select::make('Partner', 'partner')
+            //     ->options([
+            //         1 => 'Yes',
+            //         0 => 'No',
+            //     ])
+            //     ->onlyOnForms(),
 
-            Boolean::make('Partner' , "partner")
-                ->trueValue(1)
-                ->falseValue(0)->exceptOnForms(),
+            // Boolean::make('Partner', "partner")
+            //     ->trueValue(1)
+            //     ->falseValue(0)->exceptOnForms(),
 
-            Number::make('Position' , 'position')
+            Number::make('Position', 'position')
                 ->rules('required'),
-            BelongsTo::make('Category', 'category', CategoryNova::class),
+            BelongsTo::make('Parent Category', 'category', CategoryNova::class),
             HasMany::make('Children', 'children', CategoryNova::class),
         ];
     }
@@ -144,5 +151,12 @@ class CategoryNova extends Resource
     public static function label()
     {
         return 'Categories';
+    }
+
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        return $query;
+
+        return $query->whereNull('parent_id')->orderBy('id', 'DESC');
     }
 }
