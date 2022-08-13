@@ -77,33 +77,17 @@ class CategoryNova extends Resource
                 ->rules('required', 'min:1')
                 ->creationRules('unique:category_novas,name_ar')
                 ->updateRules('unique:category_novas,name_ar,{{resourceId}}'),
-            Select::make('Active', 'active')
-                ->options([
-                    1 => 'Active',
-                    0 => 'Not Active',
-                ])
-                ->onlyOnForms()
-                ->rules('required'),
 
             Boolean::make('Active', "active")
                 ->trueValue(1)
-                ->falseValue(0)->exceptOnForms(),
-
-            // Select::make('Partner', 'partner')
-            //     ->options([
-            //         1 => 'Yes',
-            //         0 => 'No',
-            //     ])
-            //     ->onlyOnForms(),
-
-            // Boolean::make('Partner', "partner")
-            //     ->trueValue(1)
-            //     ->falseValue(0)->exceptOnForms(),
+                ->falseValue(0),
+             Boolean::make('Partner', "partner")
+                 ->trueValue(1)
+                 ->falseValue(0),
 
             Number::make('Position', 'position')
                 ->rules('required'),
-            BelongsTo::make('Category', 'category', CategoryNova::class)->exceptOnForms(),
-            HasMany::make('Children', 'children', CategoryNova::class)->exceptOnForms(),
+            HasMany::make('Children', 'childrens', CategoryNova::class),
         ];
     }
 
@@ -158,8 +142,9 @@ class CategoryNova extends Resource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        return $query;
-
-        return $query->whereNull('parent_id')->orderBy('id', 'DESC');
+        if (!str_contains($request->getUri(), 'viaResourceId'))
+        {
+            return $query->whereNull('parent_id')->orderBy('id', 'DESC');
+        }
     }
 }

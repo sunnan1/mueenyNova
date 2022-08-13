@@ -14,8 +14,8 @@ class CategoryNova extends Model
         return $this->belongsTo(CategoryNova::class, 'parent_id' , 'id');
     }
 
-    public function children()
+    public function childrens()
     {
-        return $this->hasMany(CategoryNova::class, 'parent_id' , 'id');
+        return $this->hasMany(CategoryNova::class, 'parent_id');
     }
 }
